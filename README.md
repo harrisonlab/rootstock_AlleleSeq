@@ -4,7 +4,7 @@ Data was unzipped and concatonated into R1 and R2 files in the subdirectory conc
 ```shell
 gunzip *
 cat 863_LIB6292_LDI5172_GTGAAA_L00*_R1.fastq.gz >m27_r1.fa
-``
+```
 fastqc was run on each pair of reads in order to assess the quality
 ```shell
 nohup fastqc m116_r1.fq m116_r2.fq &
@@ -35,11 +35,41 @@ nohup bowtie2 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.f
 
 ```
 
-To generate a whole consensus sequence
+
+Convert SAM to BAM for sorting
+```shell
+samtools view -S -b my.sam > my.bam 2. Sort BAM for SNP calling
+samtools sort my.bam my-sorted
+```
+Index the reference genome for SAMTOOLS
+```shell
+samtools faidx my.fasta
+```
+
+Pileup into a single vcf
+
+```shell
+samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
+bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
+```
+
+Define the pedigree for beagle
+1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
+
+m116 1 2 3
+mm106 2 0 0
+m27 3 4 5
+m13 4 0 0
+m9 5 0 0
+
+
+NB- To generate a whole consensus sequence
 samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq > cns.fq i 
 
 ##Phasing with Beagle
 http://faculty.washington.edu/browning/beagle_utilities/utilities.html
+Note SHAPE could also be used- one advantage here is it can be 'read aware'  https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#readaware
+
 
 samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
 bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
