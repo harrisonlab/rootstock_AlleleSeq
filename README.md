@@ -1,5 +1,14 @@
 # rootstock
 
+To run this analysis I used:
+fastqc
+bowtie2
+samtools
+bcftools
+beagle
+
+
+
 Data was unzipped and concatonated into R1 and R2 files in the subdirectory conc within each rootstock folder
 ```shell
 gunzip *
@@ -38,18 +47,31 @@ nohup bowtie2 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.f
 
 Convert SAM to BAM for sorting
 ```shell
-samtools view -S -b my.sam > my.bam 2. Sort BAM for SNP calling
-samtools sort my.bam my-sorted
+samtools view -S -b my.sam > my.bam 
+samtools view -S -b ./m9/analysis/m9.sam >./m9/analysis/m9.bam
+samtools view -S -b ./m27/analysis/m27.sam >./m27/analysis/m27.bam
+samtools view -S -b ./m116/analysis/m116.sam >./m116/analysis/m116.bam
+samtools view -S -b ./mm106/analysis/mm106.sam >./mm106/analysis/mm106.bam
+samtools view -S -b ./m13/analysis/m13.sam >./m13/analysis/m13.bam
+
+```
+ Sort BAM for SNP calling
+```shell
+samtools sort ./m9/analysis/m9.bam ./m9/analysis/m9-sorted.bam
+samtools sort ./m9/analysis/m27.bam ./m9/analysis/m27-sorted.bam
+samtools sort ./m9/analysis/m116.bam ./m9/analysis/m116-sorted.bam
+samtools sort ./m9/analysis/mm106.bam ./m9/analysis/mm106-sorted.bam
+samtools sort ./m9/analysis/m13.bam ./m9/analysis/m13-sorted.bam
 ```
 Index the reference genome for SAMTOOLS
 ```shell
-samtools faidx my.fasta
+samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa 
 ```
 
 Pileup into a single vcf
 
 ```shell
-samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
+samtools mpileup -uf Malus_x_domestica.v2.0-pht_assembly.fa.fai  m9-sorted.bam  m27-sorted.bam  m116-sorted.bam  mm106-sorted.bam  m13-sorted.bam | bcftools view -bvcg - > var.raw.bcf
 bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
 ```
 
