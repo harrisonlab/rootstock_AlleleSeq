@@ -47,21 +47,20 @@ nohup bowtie2 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.f
 
 Convert SAM to BAM for sorting
 ```shell
-samtools view -S -b my.sam > my.bam 
-samtools view -S -b ./m9/analysis/m9.sam >./m9/analysis/m9.bam
-samtools view -S -b ./m27/analysis/m27.sam >./m27/analysis/m27.bam
-samtools view -S -b ./m116/analysis/m116.sam >./m116/analysis/m116.bam
-samtools view -S -b ./mm106/analysis/mm106.sam >./mm106/analysis/mm106.bam
-samtools view -S -b ./m13/analysis/m13.sam >./m13/analysis/m13.bam
+nohup samtools view -S -b ./m9/analysis/m9.sam >./m9/analysis/m9.bam &>m9.samtools.out&
+nohup samtools view -S -b ./m27/analysis/m27.sam >./m27/analysis/m27.bam  &>m27.samtools.out&
+nohup samtools view -S -b ./m116/analysis/m116.sam >./m116/analysis/m116.bam  &>m116.samtools.out&
+nohup samtools view -S -b ./mm106/analysis/mm106.sam >./mm106/analysis/mm106.bam  &>mm106.samtools.out&
+nohup samtools view -S -b ./m13/analysis/m13.sam >./m13/analysis/m13.bam  &>m13.samtools.out&
 
 ```
  Sort BAM for SNP calling
 ```shell
-samtools sort ./m9/analysis/m9.bam ./m9/analysis/m9-sorted.bam
-samtools sort ./m9/analysis/m27.bam ./m9/analysis/m27-sorted.bam
-samtools sort ./m9/analysis/m116.bam ./m9/analysis/m116-sorted.bam
-samtools sort ./m9/analysis/mm106.bam ./m9/analysis/mm106-sorted.bam
-samtools sort ./m9/analysis/m13.bam ./m9/analysis/m13-sorted.bam
+nohup samtools sort ./m9/analysis/m9.bam ./m9/analysis/m9-sorted.bam  &>m9.sorted.out&
+nohup samtools sort ./m9/analysis/m27.bam ./m9/analysis/m27-sorted.bam &>m27.sorted.out&
+nohup samtools sort ./m9/analysis/m116.bam ./m9/analysis/m116-sorted.bam &>m116.sorted.out&
+nohup samtools sort ./m9/analysis/mm106.bam ./m9/analysis/mm106-sorted.bam &>mm106.sorted.out&
+nohup samtools sort ./m9/analysis/m13.bam ./m9/analysis/m13-sorted.bam &>m13.sorted.out&
 ```
 Index the reference genome for SAMTOOLS
 ```shell
