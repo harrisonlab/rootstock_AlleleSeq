@@ -71,16 +71,20 @@ Pileup into a single vcf
 
 ```shell
 samtools mpileup -uf Malus_x_domestica.v2.0-pht_assembly.fa.fai  m9-sorted.bam  m27-sorted.bam  m116-sorted.bam  mm106-sorted.bam  m13-sorted.bam | bcftools view -bvcg - > var.raw.bcf
-bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
+bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
 ```
 
 Define the pedigree for beagle
 1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
 
 m116 1 2 3
+
 mm106 2 0 0
+
 m27 3 4 5
+
 m13 4 0 0
+
 m9 5 0 0
 
 
@@ -91,14 +95,14 @@ samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq >
 http://faculty.washington.edu/browning/beagle_utilities/utilities.html
 Note SHAPE could also be used- one advantage here is it can be 'read aware'  https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#readaware
 
-java –Xmx 12000m –jar beagle.jar gt=var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
+java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
 
 samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
 bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
 
 
-
+http://www.paintmychromosomes.com/
 
 ##Transcriptome ASE
 
