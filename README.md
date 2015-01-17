@@ -91,9 +91,13 @@ samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq >
 http://faculty.washington.edu/browning/beagle_utilities/utilities.html
 Note SHAPE could also be used- one advantage here is it can be 'read aware'  https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#readaware
 
+java –Xmx 12000m –jar beagle.jar gt=var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
+
 
 samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
 bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
+
+
 
 
 ##Transcriptome ASE
