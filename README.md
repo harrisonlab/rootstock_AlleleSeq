@@ -44,6 +44,13 @@ nohup bowtie2 -p 4 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106
 
 ```
 
+Made a shell script to submit automatically to grid engine
+
+```shell
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam
+```
+
+
 
 Convert SAM to BAM for sorting
 ```shell
