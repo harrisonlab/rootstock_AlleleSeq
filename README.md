@@ -36,11 +36,11 @@ mkdir ref
 cd ref
 bowtie2-build /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa Md
 
-nohup bowtie2 -x ./ref/Md -1 ./m27/conc/m27_r1.fq -2 ./m27/conc/m27_r2.fq -S ./m27/analysis/m27.sam &>m27.out&
-nohup bowtie2 -x ./ref/Md -1 ./m116/conc/m116_r1.fq -2 ./m116/conc/m116_r2.fq -S ./m116/analysis/m116.sam &>m116.out&
-nohup bowtie2 -x ./ref/Md -1 ./m9/conc/m9_r1.fq -2 ./m9/conc/m9_r2.fq -S ./m9/analysis/m9.sam &>m9.out&
-nohup bowtie2 -x ./ref/Md -1 ./m13/conc/m13_r1.fq -2 ./m13/conc/m13_r2.fq -S ./m13/analysis/m13.sam &>m13.out&
-nohup bowtie2 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.fq -S ./mm106/analysis/mm106.sam &>mm106.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m27/conc/m27_r1.fq -2 ./m27/conc/m27_r2.fq -S ./m27/analysis/m27.sam &>m27.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m116/conc/m116_r1.fq -2 ./m116/conc/m116_r2.fq -S ./m116/analysis/m116.sam &>m116.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m9/conc/m9_r1.fq -2 ./m9/conc/m9_r2.fq -S ./m9/analysis/m9.sam &>m9.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m13/conc/m13_r1.fq -2 ./m13/conc/m13_r2.fq -S ./m13/analysis/m13.sam &>m13.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.fq -S ./mm106/analysis/mm106.sam &>mm106.out&
 
 ```
 
