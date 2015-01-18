@@ -6,7 +6,7 @@ R1=$1
 R2=$2
 REF=$3
 WORK_DIR=$4
-echo "Assemble $REF with Bowtie $R1 $R2 $NAME"
+echo "Assemble $REF with Bowtie $R1 \n $R2 \n $REF \n $NAME \n"
 
 #MPI WITH QSUB 
 
