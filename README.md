@@ -105,6 +105,12 @@ bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
 http://www.paintmychromosomes.com/
 
 ##Transcriptome ASE
+http://www.cureffi.org/2013/08/26/allele-specific-rna-seq-pipeline-using-gsnap-and-gatk/
+http://alleleseq.gersteinlab.org/downloads.html
+
+The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator 
+looks like a good pipline to follow. 
+The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
 
 
 ##QTL filtering
