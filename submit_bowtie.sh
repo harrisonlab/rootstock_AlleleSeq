@@ -3,7 +3,7 @@
 #Assemble contigs using Bowtie
 #$ -S /bin/bash
 #$ -cwd
-#$ -l virtual_free=20G
+#$ -l virtual_free=8G
 
 R1=$1
 R2=$2
