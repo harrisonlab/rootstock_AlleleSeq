@@ -5,6 +5,7 @@ SCRIPT_DIR=$(readlink -f ${0%/*})
 SAM=$1
 BAMDIR=$2
 OUT=$3
+OUT2=$4
 echo "Take $SAM and make to $BAM and then sort and output to $OUT \n"
 
 #MPI WITH QSUB
@@ -12,6 +13,6 @@ echo "Take $SAM and make to $BAM and then sort and output to $OUT \n"
 echo "SAM is $SAM"
 echo "BAMDIR is $BAMDIR"
 echo "BAM is $OUT"
-
-qsub $SCRIPT_DIR/submit_samtools.sh $SAM $BAMDIR $OUT
+echo "SORTED is $OUT2"
+qsub $SCRIPT_DIR/submit_samtools.sh $SAM $BAMDIR $OUT $OUT2
 

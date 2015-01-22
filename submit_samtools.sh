@@ -7,12 +7,15 @@
 
 SAM=$1
 BAM=$2
-OUT=$3
+BAMOUT=$3
+SORTEDOUT=$4
 WORK_DIR=$TMPDIR
 
 echo  "Running Samtools with $SAM to get $OUT and output to $BAM\n"
 
-samtools view -S -b $SAM >$WORK_DIR/$OUT
+samtools view -S -b $SAM >$WORK_DIR/$BAMOUT
+samtools sort $WORK_DIR/$BAMOUT $WORK_DIR/$SORTEDOUT
+
 
 echo "Completed samtools\n"
 $WORK_DIR
