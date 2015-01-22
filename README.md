@@ -77,6 +77,15 @@ nohup samtools sort ./m116/analysis/m116.bam ./m116/analysis/m116-sorted.bam &
 nohup samtools sort ./mm106/analysis/mm106.bam ./mm106/analysis/mm106-sorted.bam &
 nohup samtools sort ./m13/analysis/m13.bam ./m13/analysis/m13-sorted.bam &
 ```
+
+Do this by shell
+```shell
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27.bam 
+
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/small.test /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.test
+
+
+```
 Index the reference genome for SAMTOOLS
 ```shell
 samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa 
