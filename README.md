@@ -67,8 +67,8 @@ nohup samtools view -S -b ./m27/analysis/m27_ge.sam >./m27/analysis/m27.bam  &
 nohup samtools view -S -b ./m116/analysis/m116_ge.sam >./m116/analysis/m116.bam  &
 nohup samtools view -S -b ./mm106/analysis/mm106_ge.sam >./mm106/analysis/mm106.bam  &
 nohup samtools view -S -b ./m13/analysis/m13_ge.sam >./m13/analysis/m13.bam  &
-
 ```
+
  Sort BAM for SNP calling
 ```shell
 nohup samtools sort ./m9/analysis/m9.bam ./m9/analysis/m9-sorted.bam  &
@@ -78,13 +78,14 @@ nohup samtools sort ./mm106/analysis/mm106.bam ./mm106/analysis/mm106-sorted.bam
 nohup samtools sort ./m13/analysis/m13.bam ./m13/analysis/m13-sorted.bam &
 ```
 
-Do this by shell
+Do this by shell (equivalent commands in SGE wrapper)
 ```shell
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27.bam 
-
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/small.test /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.bam m13.sorted
 
 ```
+
+
 Index the reference genome for SAMTOOLS
 ```shell
 samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa 
@@ -101,13 +102,9 @@ Define the pedigree for beagle
 1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
 
 m116 1 2 3
-
 mm106 2 0 0
-
 m27 3 4 5
-
 m13 4 0 0
-
 m9 5 0 0
 
 
