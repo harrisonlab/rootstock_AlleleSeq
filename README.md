@@ -82,8 +82,7 @@ Do this by shell
 ```shell
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27.bam 
 
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/small.test /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.test m13.sorted.test
-
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/small.test /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.bam m13.sorted
 
 ```
 Index the reference genome for SAMTOOLS
