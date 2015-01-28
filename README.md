@@ -87,6 +87,11 @@ Do this by shell (equivalent commands in SGE wrapper)
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/ mm106.bam mm106.sorted
 ```
 
+Note- to index and then view the bam file
+samtools index m9.sorted.bam
+samtools tview m9.sorted.bam
+
+
 
 Index the reference genome for SAMTOOLS
 ```shell
@@ -96,8 +101,9 @@ samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa
 Pileup into a single vcf
 
 ```shell
-samtools mpileup -uf Malus_x_domestica.v2.0-pht_assembly.fa.fai  m9-sorted.bam  m27-sorted.bam  m116-sorted.bam  mm106-sorted.bam  m13-sorted.bam | bcftools view -bvcg - > var.raw.bcf
-bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
+samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa.fai  ./m9/analysis/m9-sorted.bam  ./m27/analysis/m27-sorted.bam  ./m116/analysis/m116-sorted.bam  ./mm106/analysis/mm106-sorted.bam  ./m13/analysis/m13-sorted.bam | bcftools view -bvcg - > ./vcf/var.raw.bcf
+
+bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
 
 ```
 
