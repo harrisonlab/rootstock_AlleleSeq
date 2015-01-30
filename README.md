@@ -9,7 +9,7 @@ beagle
 
 
 
-Data was unzipped and concatonated into R1 and R2 files in the subdirectory conc within each rootstock folder
+Data was unzipped and concatenated into R1 and R2 files in the subdirectory conc within each rootstock folder
 ```shell
 gunzip *
 cat 863_LIB6292_LDI5172_GTGAAA_L00*_R1.fastq.gz >m27_r1.fa
@@ -25,11 +25,12 @@ nohup fastqc mm106_r1.fq mm106_r2.fq &
  
 Trimming was performed with fastq-mcf 
 ```shell
- ./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ 
-
- 
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ 
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/ 
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/ 
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/ 
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/ 
  ```
- 
  
  
 ##Assembly to reference
@@ -46,28 +47,23 @@ mkdir ref
 cd ref
 bowtie2-build /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa Md
 
-nohup bowtie2 -p 4 -x ./ref/Md -1 ./m27/conc/m27_r1.fq -2 ./m27/conc/m27_r2.fq -S ./m27/analysis/m27.sam &>m27.out&
-nohup bowtie2 -p 4 -x ./ref/Md -1 ./m116/conc/m116_r1.fq -2 ./m116/conc/m116_r2.fq -S ./m116/analysis/m116.sam &>m116.out&
-nohup bowtie2 -p 4 -x ./ref/Md -1 ./m9/conc/m9_r1.fq -2 ./m9/conc/m9_r2.fq -S ./m9/analysis/m9.sam &>m9.out&
-nohup bowtie2 -p 4 -x ./ref/Md -1 ./m13/conc/m13_r1.fq -2 ./m13/conc/m13_r2.fq -S ./m13/analysis/m13.sam &>m13.out&
-nohup bowtie2 -p 4 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq -2 ./mm106/conc/mm106_r2.fq -S ./mm106/analysis/mm106.sam &>mm106.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m27/conc/m27_r1.fq.trim -2 ./m27/conc/m27_r2.fq.trim -S ./m27/analysis/m27.sam &>m27.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m116/conc/m116_r1.fq.trim -2 ./m116/conc/m116_r2.fq.trim -S ./m116/analysis/m116.sam &>m116.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m9/conc/m9_r1.fq.trim -2 ./m9/conc/m9_r2.fq.trim -S ./m9/analysis/m9.sam &>m9.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./m13/conc/m13_r1.fq.trim -2 ./m13/conc/m13_r2.fq.trim -S ./m13/analysis/m13.sam &>m13.out&
+nohup bowtie2 -p 4 -x ./ref/Md -1 ./mm106/conc/mm106_r1.fq.trim -2 ./mm106/conc/mm106_r2.fq.trim -S ./mm106/analysis/mm106.sam &>mm106.out&
 
 ```
 
 Made a shell script to submit automatically to grid engine
 
 ```shell
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam
-
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/m116_ge.sam
-
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_ge.sam
-
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/m13_ge.sam
-
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/m116_ge.sam
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_ge.sam
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/m13_ge.sam
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam
 ```
-
 
 
 Convert SAM to BAM for sorting

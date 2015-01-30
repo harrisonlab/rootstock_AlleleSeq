@@ -13,5 +13,3 @@ echo "BAM is $OUT"
 echo "SORTED is $OUT2"
 
 qsub $SCRIPT_DIR/submit_samtools.sh $SAM $BAMDIR $OUT $OUT2
-
-./fastq-mcf 

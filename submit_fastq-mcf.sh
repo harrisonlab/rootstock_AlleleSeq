@@ -11,8 +11,7 @@ REVERSE_READ=$3
 TRIMDIR=$4
 
 #FASTQ MCF COMMAND
-fastq-mcf $SCRIPT_DIR/illumina_full_adapters.fa $FORWARD_READ $REVERSE_READ -o $WORK_DIR/$FORWARD_READ.trim -o $WORK_DIR/$REVERSE_READ.trim -C 10000000 -u -k 20 -t 0.01 -p 20
-
-
 cd $WORK_DIR
+fastq-mcf $SCRIPT_DIR/illumina_full_adapters.fa $FORWARD_READ $REVERSE_READ -o $FORWARD_READ.trim -o $REVERSE_READ.trim -C 10000000 -u -k 20 -t 0.01 -p 20
+
 cp * $TRIMDIR/.
