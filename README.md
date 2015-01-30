@@ -22,6 +22,17 @@ nohup fastqc m9_r1.fq m9_r2.fq &
 nohup fastqc m13_r1.fq m13_r2.fq &
 nohup fastqc mm106_r1.fq mm106_r2.fq &
  ```
+ 
+Trimming was performed with fastq-mcf 
+```shell
+
+./fastq-mcf /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/
+ 
+ 
+ 
+ 
+ 
+ 
 ##Assembly to reference
 
 The reference genome was downloaded from GDR on 17/1/15
