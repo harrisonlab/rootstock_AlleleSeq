@@ -25,11 +25,10 @@ nohup fastqc mm106_r1.fq mm106_r2.fq &
  
 Trimming was performed with fastq-mcf 
 ```shell
+ ./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ 
 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/
  
- 
- 
+ ```
  
  
  
