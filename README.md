@@ -10,10 +10,12 @@ beagle
 
 
 Data was unzipped and concatenated into R1 and R2 files in the subdirectory conc within each rootstock folder
+eg:
 ```shell
 gunzip *
 cat 863_LIB6292_LDI5172_GTGAAA_L00*_R1.fastq.gz >m27_r1.fa
 ```
+
 fastqc was run on each pair of reads in order to assess the quality
 ```shell
 nohup fastqc m116_r1.fq m116_r2.fq &
@@ -36,7 +38,6 @@ Trimming was performed with fastq-mcf
 ##Assembly to reference
 
 The reference genome was downloaded from GDR on 17/1/15
-
 Reference location : /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa
 
 A Bowtie 2 hash was created
