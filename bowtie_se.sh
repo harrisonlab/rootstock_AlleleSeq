@@ -14,5 +14,5 @@ echo "R2 is $R2"
 echo "REF is $REF"
 echo "WORK DIR is $4"
 
-qsub $SCRIPT_DIR/submit_bowtie.sh $R1 $REF $WORK_DIR
+qsub $SCRIPT_DIR/submit_bowtie_se.sh $R1 $REF $WORK_DIR
 
