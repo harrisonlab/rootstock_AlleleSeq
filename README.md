@@ -41,19 +41,8 @@ Trimming was performed with fastq-mcf
  
 ##Assembly to reference
 
-The reference genome was downloaded from GDR on 17/1/15
-Reference location : /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa
 
-A Bowtie 2 hash was created
-
-```shell
-cd /home/groups/harrisonlab/project_files/rootstock_genetics/
-mkdir ref
-cd ref
-bowtie2-build /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa Md
-```
-
-Another hash was created for version 1 of the genome
+A hash was created for version 1 of the genome
 
 ```shell
 cd /home/groups/harrisonlab/project_files/rootstock_genetics/
@@ -65,17 +54,7 @@ bowtie2-build Malus_x_domestica.v1.0-primary.pseudo.fa Md
 
 
 Made a shell script to submit automatically to grid engine
-
-```shell
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/m116_ge.sam
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_ge.sam
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/m13_ge.sam
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam
-```
-
-Made a shell script to submit automatically to grid engine
-Re-done for version 1 of the genome!!
+for version 1 of the genome!!
 
 ```shell
 ./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/ m27_v1.sam 250 500
@@ -84,18 +63,9 @@ Re-done for version 1 of the genome!!
 ./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/ m13_v1.sam 250 500
 ./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/ mm106_v1.sam 250 500
 ./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis_v1/ gala_v1.sam 250 500
-./bowtie_se.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/o3_v1.sam 
+./bowtie_se.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/ o3_v1.sam 
 ```
 
-Convert SAM to BAM and sort BAM for SNP calling
-Do this by SGE script
-```shell
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27.bam m27.sorted 
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/ m9.bam m9.sorted
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/m116_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/ m116.bam m116.sorted
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/m13_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.bam m13.sorted 
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/ mm106.bam mm106.sorted
-```
 
 And again for version 1
 ```shell
@@ -107,33 +77,21 @@ And again for version 1
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis/gala_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis/ gala_v1.bam gala_v1.sorted
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis/o3_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis/ o3_v1.bam o3_v1.sorted
 
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1/test.sam /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1 test.bam test.sorted
+
 ```
 
 Note- to index and then view the bam file using a simple text viewer
 samtools index m9.sorted.bam
-samtools tview m9.sorted.bam
-
+samtools tview m9.sorted.bam ../../ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa
 
 Once indexed the program qualimap can be used with the BAM files to view statistics such as coverage and insert size etc
 
 
 Index the reference genome for SAMTOOLS
 ```shell
-samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa 
-
-cd v1
+cd /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1
 samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa 
-```
-
-Pileup into a single vcf
-
-```shell
-#samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa.fai  ./m9/analysis/m9-sorted.bam  ./m27/analysis/m27-sorted.bam  ./m116/analysis/m116-sorted.bam  ./mm106/analysis/mm106-sorted.bam  ./m13/analysis/m13-sorted.bam | bcftools view -bvcg - > ./vcf/var.raw.bcf
-
-samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa  ./m9/analysis/m9.sorted.bam  ./m27/analysis/m27.sorted.bam  ./m116/analysis/m116.sorted.bam  ./mm106/analysis/mm106.sorted.bam  ./m13/analysis/m13.sorted.bam >pileup.bam
-bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
-bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
-
 ```
 
 Pileup into a single vcf with v1
@@ -185,3 +143,51 @@ The url above (gerstein) has most of the details and the readme files in vcf2snp
 
 
 
+##OLD COMMANDS
+
+
+Made a shell script to submit automatically to grid engine
+The reference genome was downloaded from GDR on 17/1/15
+Reference location : /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa
+
+A Bowtie 2 hash was created
+
+```shell
+cd /home/groups/harrisonlab/project_files/rootstock_genetics/
+mkdir ref
+cd ref
+bowtie2-build /home/groups/harrisonlab/ref_genomes/rosaceae/malus/md_v2/Malus_x_domestica.v2.0-pht_assembly.fa Md
+```
+
+```shell
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27_ge.sam 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/ m116_ge.sam 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/ m9_ge.sam 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13_ge.sam 250 500 
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/ mm106_ge.sam 250 500
+```
+Convert SAM to BAM and sort BAM for SNP calling
+Do this by SGE script
+```shell
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27.bam m27.sorted 
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/ m9.bam m9.sorted
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/m116_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis/ m116.bam m116.sorted
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/m13_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis/ m13.bam m13.sorted 
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/mm106_ge.sam /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis/ mm106.bam mm106.sorted
+
+```
+Index the reference genome for SAMTOOLS
+```shell
+samtools faidx Malus_x_domestica.v2.0-pht_assembly.fa 
+
+```
+Pileup into a single vcf
+
+```shell
+#samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa.fai  ./m9/analysis/m9-sorted.bam  ./m27/analysis/m27-sorted.bam  ./m116/analysis/m116-sorted.bam  ./mm106/analysis/mm106-sorted.bam  ./m13/analysis/m13-sorted.bam | bcftools view -bvcg - > ./vcf/var.raw.bcf
+
+samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa  ./m9/analysis/m9.sorted.bam  ./m27/analysis/m27.sorted.bam  ./m116/analysis/m116.sorted.bam  ./mm106/analysis/mm106.sorted.bam  ./m13/analysis/m13.sorted.bam >pileup.bam
+bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
+bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
+
+```

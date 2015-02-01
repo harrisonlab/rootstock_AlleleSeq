@@ -3,7 +3,7 @@
 SCRIPT_DIR=$(readlink -f ${0%/*})
 
 R1=$1
-REF=$3
+REF=$2
 WORK_DIR=$3
 OUT=$4
 echo "Assemble $REF with Bowtie $R1 \n $R2 \n $REF \n $NAME \n"
