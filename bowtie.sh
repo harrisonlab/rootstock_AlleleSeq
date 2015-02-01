@@ -7,7 +7,7 @@ R2=$2
 REF=$3
 WORK_DIR=$4
 OUT=$5
-X-$6
+X=$6
 I=$7
 echo "Assemble $REF with Bowtie $R1 \n $R2 \n $REF \n $NAME \n"
 
