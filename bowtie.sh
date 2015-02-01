@@ -20,5 +20,5 @@ echo "R2 is $R2"
 echo "REF is $REF"
 echo "WORK DIR is $4"
 echo "OUT is $5"
-qsub $SCRIPT_DIR/submit_bowtie.sh $R1 $R2 $REF $WORK_DIR $OUT $X $I
+qsub $SCRIPT_DIR/submit_bowtie.sh $R1 $R2 $REF $WORK_DIR $OUT $X $I 
 

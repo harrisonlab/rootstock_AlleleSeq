@@ -37,11 +37,31 @@ Trimming was performed with fastq-mcf
 ./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/ 
 ./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/
 ./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq  /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/ 
+
+./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/
+
  ```
  
+ Removal of phix
+ ```shell
+ ./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/ phix_filtered 50 500
+ 
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ phix_filtered 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/conc/ phix_filtered 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/ phix_filtered 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/ phix_filtered 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/ phix_filtered 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/ phix_filtered 250 500
+
+./bowtie_se.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/ phix_filtered 
+
+ 
+ 
+ 
+ 
+ ```
+  
 ##Assembly to reference
-
-
 A hash was created for version 1 of the genome
 
 ```shell
@@ -52,22 +72,23 @@ cd v1
 bowtie2-build Malus_x_domestica.v1.0-primary.pseudo.fa Md
 ```
 
-
 Made a shell script to submit automatically to grid engine
 for version 1 of the genome!!
 
 ```shell
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/ m27_v1.sam 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/ m116_v1.sam 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis_v1/ m9_v1.sam 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/ m13_v1.sam 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/ mm106_v1.sam 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis_v1/ gala_v1.sam 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/ m27_v1 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/ m116_v1 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis_v1/ m9_v1 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/ m13_v1 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/ mm106_v1 250 500
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis_v1/ gala_v1 250 500
 ./bowtie_se.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/ o3_v1.sam 
+
+./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/phix_filtered.1 /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/phix_filtered.2 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1/ test_v1 250 500
+
 ```
 
-
-And again for version 1
+SAM to BAM and sort
 ```shell
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/m27_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis/ m27_v1.bam m27_v1.sorted 
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/m9_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis/ m9_v1.bam m9_v1.sorted
@@ -77,7 +98,7 @@ And again for version 1
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis/gala_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/gala/analysis/ gala_v1.bam gala_v1.sorted
 ./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis/o3_v1.sam /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis/ o3_v1.bam o3_v1.sorted
 
-./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1/test.sam /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1 test.bam test.sorted
+./samtools.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1/test_v1 /home/groups/harrisonlab/project_files/rootstock_genetics/test/analysis_v1 test.bam test.sorted
 
 ```
 
@@ -86,7 +107,6 @@ samtools index m9.sorted.bam
 samtools tview m9.sorted.bam ../../ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa
 
 Once indexed the program qualimap can be used with the BAM files to view statistics such as coverage and insert size etc
-
 
 Index the reference genome for SAMTOOLS
 ```shell
@@ -102,7 +122,6 @@ bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
 bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
 
 ```
-
 
 Define the pedigree for beagle
 1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
