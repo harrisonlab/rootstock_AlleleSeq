@@ -8,12 +8,14 @@
 R1=$1
 REF=$2
 DEST=$3
+OUTNAME=$4
 WORK_DIR=$TMPDIR
 
 echo  "Running Bowtie 2S with the following in= REF IS '$REF' READ 1 '$R1' READ 2 ' $R2 ' $DEST "
 
-bowtie2 -p 4 -x $REF -U $R1  -S $DEST
+bowtie2 -p 4 -x $REF -U $R1  -S $WORK_DIR/$OUTNAME
 
-$WORK_DIR
-#cp -r $WORK_DIR/* $DEST/.
-#echo "files copied"
+cd $WORK_DIR
+cp * $BAMDIR/.
+
+
