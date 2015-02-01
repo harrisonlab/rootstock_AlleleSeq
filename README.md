@@ -94,7 +94,7 @@ cd /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1
 samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa 
 ```
 
-Pileup into a single vcf with v1
+Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
 ```shell
 samtools mpileup -uf ./ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa   ./m9/analysis/m9_v1.sorted.bam  ./m27/analysis/m27_v1.sorted.bam  ./m116/analysis/m116_v1.sorted.bam  ./mm106/analysis/mm106_v1.sorted.bam  ./m13/analysis/m13_v1.sorted.bam ./o3/analysis/o3_v1.sorted.bam >pileup.bam
