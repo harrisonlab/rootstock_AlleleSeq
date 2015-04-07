@@ -105,14 +105,37 @@ Once indexed the program qualimap can be used with the BAM files to view statist
 
 Index the reference genome for SAMTOOLS
 ```shell
-cd /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1
+cd #!/bin/bash
+
+#Pileup BAM files with samtools
+#$ -S /bin/bash
+#$ -cwd
+#$ -l virtual_free=8G
+
+REF=$1
+BAMS=$(awk -vRS="\n" -vORS=" " '1' $2)
+#"/home/deakig/projects/apple_rootstock/testing/m27.sorted.bam" 
+#(tr "\n" " " < $2)
+DEST=$3
+OUTNAME=$4
+WORK_DIR=$TMPDIR
+
+echo "piling up $BAMS with $REF output file: $OUTNAME"
+
+cd $WORK_DIR
+
+samtools mpileup -o $OUTNAME -uf $REF $BAMS
+
+cp * $DEST/.
+
 samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa 
 ```
 
 Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
 ```shell
-samtools mpileup -uf ./ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa   ./m9/analysis/m9_v1.sorted.bam  ./m27/analysis/m27_v1.sorted.bam  ./m116/analysis/m116_v1.sorted.bam  ./mm106/analysis/mm106_v1.sorted.bam  ./m13/analysis/m13_v1.sorted.bam ./o3/analysis/o3_v1.sorted.bam >pileup.bam
+ ./pileup.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf
+
 bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
 bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
 
