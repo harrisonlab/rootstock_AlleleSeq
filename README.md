@@ -116,7 +116,7 @@ Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
 First step is to index all BAM files
 ```shell
-cat bam_files|xargs -I file samtools faidx file  
+cat bam_files|xargs -I file samtools index file  
 ```
 
 
