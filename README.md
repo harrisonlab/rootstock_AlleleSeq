@@ -115,16 +115,18 @@ Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
 mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
 First step is to index all BAM files (included in bam_files txt file). Then run pileup2.sh
-Regions have been defined in the regions file
+regions have been defined in the regions file. Finally concatenate output files (the regions file is sorted alphabetically rather than by chromosome - temp fix is to create an ordered list of output file names)
 ```shell
 cat bam_files|xargs -I file samtools index file 
 ./pileup2.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf regions
 
+bcftools concat -f files >all_piledup.bcf
 ```
-
+Filter output for heterozygous sites, 
 
 ```shell
-./pileup2.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf
+bcftools view -p -v snps,indels,mnps,other -g ^hom all_piledup.bcf > all_piledup.vcf
+cat all_piledup.vcf|vcfutils.pl varFilter -D100 > flt_all_piledup.vcf
 
 bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
 bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
