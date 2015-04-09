@@ -113,8 +113,15 @@ samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa
 
 Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
+mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
+First step is to index all BAM files
 ```shell
- ./pileup.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf
+cat bam_files|xargs -I file samtools faidx file  
+```
+
+
+```shell
+./pileup2.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf
 
 bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
 bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
