@@ -122,15 +122,11 @@ cat bam_files|xargs -I file samtools index file
 
 bcftools concat -f files >all_piledup.bcf
 ```
-Filter output for heterozygous sites, 
+Filter output for variants 
 
 ```shell
-bcftools view -p -v snps,indels,mnps,other -g ^hom all_piledup.bcf > all_piledup.vcf
+bcftools call -Ov -v -m all_piledup.bcf > all_piledup.vcf
 cat all_piledup.vcf|vcfutils.pl varFilter -D100 > flt_all_piledup.vcf
-
-bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
-bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
-
 ```
 
 Define the pedigree for beagle
