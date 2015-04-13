@@ -163,6 +163,28 @@ The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator
 looks like a good pipline to follow. 
 The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
 
+downloaded vcf2diploid
+requires that output directories are created before running command
+Using local copy of Java 1.7 
+
+```shell
+mkdir allele/m27
+mkdir allele/m116
+mkdir allele/m9
+mkdir allele/m13
+mkdir allele/m106
+mkdir allele/gala
+mkdir allele/03
+
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m27
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m116
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m9
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m13
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m106
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/gala
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/o3
+```
+
 
 ##QTL filtering
 
