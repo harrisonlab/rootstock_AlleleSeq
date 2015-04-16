@@ -191,9 +191,22 @@ CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gc
 
 ```shell
 configure linuxx8664gcc --disable-xft --disable-x11
-make 
+make
 . bin/thisroot.sh 
 ```
+Run CNVnator with below:
+```shell
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele/m116.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m13/allele/m13.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/m13_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele/m27.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m9/allele/m9.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis_v1/m9_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/allele/mm106.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/mm106_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/o3/allele/o3.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/o3_v1.sorted.bam
+```
+
+Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this ~ requires manual editing of a sh file. This can be scripted.
+
+
 
 ##QTL filtering
 
