@@ -208,6 +208,12 @@ Run CNVnator with below:
 
 Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this ~ requires manual editing of a sh file. This can be scripted.
 
+AlleleSeq pipeline
+
+The following files were modified:
+PIPELINE.mk (this is specific to each run)
+MergeBowtie.py (set mappers to False as not looking for indels ~ this can probably be configured in PIPELINE.mk)
+SnpCounts.py (set pat_1000G and mat_1000G to None for mappers and added line 48 chrm=chrm.replace("chr","") )
 
 
 ##QTL filtering
