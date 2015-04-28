@@ -215,6 +215,9 @@ PIPELINE.mk (this is specific to each run)
 MergeBowtie.py (set mappers to False as not looking for indels ~ this can probably be configured in PIPELINE.mk)
 SnpCounts.py (set pat_1000G and mat_1000G to None for mappers and added line 48 chrm=chrm.replace("chr","") )
 
+Updated allelseq pipeline to use Bowtie2 and accept paired-end read data. filter_input was modified as attached.
+
+
 
 ##QTL filtering
 
