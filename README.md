@@ -197,6 +197,7 @@ make
 . bin/thisroot.sh 
 ```
 Run CNVnator with below:
+
 ```shell
 ./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele/m116.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
 ./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m13/allele/m13.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/m13_v1.sorted.bam
@@ -218,6 +219,7 @@ SnpCounts.py (set pat_1000G and mat_1000G to None for mappers and added line 48 
 Updated allelseq pipeline to use Bowtie2 and accept paired-end read data. filter_input was modified as attached.
 
 Trim RNA_Seq data
+
 ```shell
 ./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
 ./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
@@ -232,6 +234,25 @@ Trim RNA_Seq data
 ./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
 ./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/13-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
  ```
+
+Created soft links to RNA-seq files in Alleleseq pipeline folder
+Ran Alleleseq pipeline with followin:
+
+```shell
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 02-RNA_L1_1.fq.trim 02-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S2_16T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 03-RNA_L1_1.fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 04-RNA_L1_1.fq.trim 04-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S4_17T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 05-RNA_L1_1.fq.trim 05-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S5_17B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 06-RNA_L1_1.fq.trim 06-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S6_19T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 07-RNA_L1_1.fq.trim 07-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S7_19B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 08-RNA_L1_1.fq.trim 08-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S8_6T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 09-RNA_L1_1.fq.trim 09-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S9_6B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 10-RNA_L1_1.fq.trim 10-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S10_8T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 11-RNA_L1.1.fq.trim 11-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S11_8B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 12-RNA_L1.1.fq.trim 12-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S12_10T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 13-RNA_L1.1.fq.trim 13-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S13_10B_hits.txt
+```
+
 
 ##QTL filtering
 
