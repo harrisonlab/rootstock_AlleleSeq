@@ -235,8 +235,8 @@ Trim RNA_Seq data
 ./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/13-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
  ```
 
-Created soft links to RNA-seq files in Alleleseq pipeline folder
-Ran Alleleseq pipeline with followin:
+Created soft links to RNA-seq files in Alleleseq pipeline folder.
+Ran Alleleseq pipeline with following:
 
 ```shell
 ./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 02-RNA_L1_1.fq.trim 02-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S2_16T_hits.txt
