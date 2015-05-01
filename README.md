@@ -113,12 +113,20 @@ samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa
 
 Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
+mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
+First step is to index all BAM files (included in bam_files txt file). Then run pileup2.sh
+regions have been defined in the regions file. Finally concatenate output files (the regions file is sorted alphabetically rather than by chromosome - temp fix is to create an ordered list of output file names)
 ```shell
- ./pileup.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf
+cat bam_files|xargs -I file samtools index file 
+./pileup2.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf regions
 
-bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
-bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
+bcftools concat -f files >all_piledup.bcf
+```
+Filter output for variants 
 
+```shell
+bcftools call -Ov -v -m all_piledup.bcf > all_piledup.vcf
+cat all_piledup.vcf|vcfutils.pl varFilter -D100 > flt_all_piledup.vcf
 ```
 
 Define the pedigree for beagle
@@ -154,6 +162,96 @@ http://alleleseq.gersteinlab.org/downloads.html
 The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator 
 looks like a good pipline to follow. 
 The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
+
+downloaded vcf2diploid
+requires that output directories are created before running command
+Using local copy of Java 1.7 
+
+```shell
+mkdir allele/m27
+mkdir allele/m116
+mkdir allele/m9
+mkdir allele/m13
+mkdir allele/m106
+mkdir allele/gala
+mkdir allele/03
+
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m27
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m116
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m9
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m13
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/m106
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/gala
+~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/o3
+```
+
+Run vcf2snp on above output
+
+..../AlleleSeq_pipeline_v1.2/vcf2snp results/beagle.vcf.vcf -c m27 >m27
+
+CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. Last statement creates $ROOTSYS.
+
+```shell
+configure linuxx8664gcc --disable-xft --disable-x11
+make
+. bin/thisroot.sh 
+```
+Run CNVnator with below:
+
+```shell
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele/m116.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m13/allele/m13.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/m13_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele/m27.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m9/allele/m9.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis_v1/m9_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/allele/mm106.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/mm106_v1.sorted.bam
+./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/o3/allele/o3.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/o3_v1.sorted.bam
+```
+
+Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this ~ requires manual editing of a sh file. This can be scripted.
+
+AlleleSeq pipeline
+
+The following files were modified:
+PIPELINE.mk (this is specific to each run)
+MergeBowtie.py (set mappers to False as not looking for indels ~ this can probably be configured in PIPELINE.mk)
+SnpCounts.py (set pat_1000G and mat_1000G to None for mappers and added line 48 chrm=chrm.replace("chr","") )
+
+Updated allelseq pipeline to use Bowtie2 and accept paired-end read data. filter_input was modified as attached.
+
+Trim RNA_Seq data
+
+```shell
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/04-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/04-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/05-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/05-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/06-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/06-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/07-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/07-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/13-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+ ```
+
+Created soft links to RNA-seq files in Alleleseq pipeline folder.
+Ran Alleleseq pipeline with following:
+
+```shell
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 02-RNA_L1_1.fq.trim 02-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S2_16T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 03-RNA_L1_1.fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 04-RNA_L1_1.fq.trim 04-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S4_17T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 05-RNA_L1_1.fq.trim 05-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S5_17B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 06-RNA_L1_1.fq.trim 06-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S6_19T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 07-RNA_L1_1.fq.trim 07-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S7_19B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 08-RNA_L1_1.fq.trim 08-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S8_6T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 09-RNA_L1_1.fq.trim 09-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S9_6B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 10-RNA_L1_1.fq.trim 10-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S10_8T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 11-RNA_L1.1.fq.trim 11-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S11_8B_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 12-RNA_L1.1.fq.trim 12-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S12_10T_hits.txt
+./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 13-RNA_L1.1.fq.trim 13-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S13_10B_hits.txt
+```
 
 
 ##QTL filtering
