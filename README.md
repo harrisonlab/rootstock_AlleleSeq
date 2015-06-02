@@ -152,7 +152,7 @@ cat flt_all_piledup.vcf|vcf-sort -c >2flt_all_piledup.vcf
 ```
 ~/usr/bin/java -jar beagle.r1399.jar gt=../temp/2flt_all_piledup.vcf ped=pedigree out=beagle_v3.out
 
-#java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
+old - java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
 
 samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
