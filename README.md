@@ -190,7 +190,9 @@ Before running it may be worth editing the beagle output and changing vcf column
 
 ..../AlleleSeq_pipeline_v1.2/vcf2snp results/beagle.vcf.vcf -c m27 >m27
 
-CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. Last statement creates $ROOTSYS.
+CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. 
+
+Last statement creates $ROOTSYS which must exist for CNVnator to work
 
 ```shell
 configure linuxx8664gcc --disable-xft --disable-x11
