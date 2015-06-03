@@ -185,7 +185,8 @@ mkdir allele/03
 ~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf results/beagle.vcf.vcf -outDir allele/o3
 ```
 
-Run vcf2snp on above output
+Alleleseq pipeline requires a specific format for SNV file - vcf2snp can sort this out.
+Before running it may be worth editing the beagle output and changing vcf column headings from path to BAM file to a short name then:
 
 ..../AlleleSeq_pipeline_v1.2/vcf2snp results/beagle.vcf.vcf -c m27 >m27
 
