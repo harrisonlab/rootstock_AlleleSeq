@@ -239,6 +239,10 @@ Trim RNA_Seq data
  ```
 
 Created soft links to RNA-seq files in Alleleseq pipeline folder.
+
+Created mat and pat directories and links to chromosomes. 
+Created bowtie2 index to mat/pat chromosomes
+
 Ran Alleleseq pipeline with following:
 
 ```shell
