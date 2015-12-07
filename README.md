@@ -123,7 +123,8 @@ cat bam_files|xargs -I file samtools index file
 bcftools concat -f files >all_piledup.bcf
 ```
 Filter output for variants 
-
+#####The below probably needs editing currently filters out any variants with > 100 mapped reads (varFilter -D100).
+varFilter -d100 filters variants with < 100 reads which is probably more reasonable...
 ```shell
 bcftools call -Ov -v -m all_piledup.bcf > all_piledup.vcf
 cat all_piledup.vcf|vcfutils.pl varFilter -D100 > flt_all_piledup.vcf
@@ -145,13 +146,14 @@ samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq >
 ##Phasing with Beagle
 http://faculty.washington.edu/browning/beagle_utilities/utilities.html
 Note SHAPE could also be used- one advantage here is it can be 'read aware'  https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#readaware
+```shell
+java –Xmx 12000m –jar beagle.jar gt=./beagle/flt_all_piledup.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
-java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
+#samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
+#bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
+#java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
-
-samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
-bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
-
+```
 
 http://www.paintmychromosomes.com/
 
