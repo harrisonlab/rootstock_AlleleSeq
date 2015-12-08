@@ -210,7 +210,16 @@ Note - this only works on the head node at present.
 ./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/o3/allele/o3.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/o3_v1.sorted.bam
 ```
 
-Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this ~ requires manual editing of a sh file. This can be scripted.
+Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this.
+(this will only run on the head node currently as it uses cnvnator/root)
+```shell
+./alleleWrap_2a_cnvnator_rd.sh m27 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m27.root m27.snv
+./alleleWrap_2a_cnvnator_rd.sh m9 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m9.root m9.snv
+./alleleWrap_2a_cnvnator_rd.sh m13 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m13.root m13.snv
+./alleleWrap_2a_cnvnator_rd.sh mm106 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas mm106.root mm106.snv
+./alleleWrap_2a_cnvnator_rd.sh m116 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m116.root m116.snv
+./alleleWrap_2a_cnvnator_rd.sh o3 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas o3.root o3.snv
+```
 
 AlleleSeq pipeline
 
