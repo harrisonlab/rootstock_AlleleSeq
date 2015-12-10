@@ -127,7 +127,7 @@ Filter output for variants
 varFilter -d100 filters variants with < 100 reads which is probably more reasonable...
 ```shell
 bcftools call -Ov -v -m all_piledup.bcf > all_piledup.vcf
-cat all_piledup.vcf|vcfutils.pl varFilter -D100 > flt_all_piledup.vcf
+cat all_piledup.vcf|vcfutils.pl varFilter -d100 > flt_all_piledup.vcf
 ```
 
 Define the pedigree for beagle
@@ -193,14 +193,16 @@ Run vcf2snp on above output
 
 CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. Last statement creates $ROOTSYS.
 UPDATE - root should be installed using a local copy of pcre NOT the root (boom boom) installed version. It's not on the worker nodes and otherwise downstream processes (CNVnator) won't work on these nodes. 
-
+UPDATE2 - root reconfigured. Tor some reason the install ignores the prefix flag for the etc directory and tries to stick the files into /usr/local/etc, anyway the --etcdir flag can set this explicitly.
 ```shell
-configure linuxx8664gcc --disable-xft --disable-x11
+./configure linuxx8664gcc --prefix=/home/deakig/usr/local --etcdir=/home/usr/local/etc --with-python-libdir=/usr/lib --with-python-incdir=/usr/include --enable-builtin-pcre --disable-x11 
 make
-. bin/thisroot.sh 
+make install
+. ~/usr/local/bin/thisroot.sh
 ```
+
 Run CNVnator with below:
-Note - this only works on the head node at present. 
+ 
 ```shell
 ./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele/m116.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
 ./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m13/allele/m13.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/m13_v1.sorted.bam
@@ -211,7 +213,12 @@ Note - this only works on the head node at present.
 ```
 
 Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this.
-(this will only run on the head node currently as it uses cnvnator/root)
+The wrapper script was edited to reflect our environment and the makefile needed editing to reflect the locaction of root (root puts its files in a root folder under lib/include). This pipeline makes a build specific to each root file, therefore the following files were copied to directories for each rootstock (e.g. m27_alleleSeq_cnvScript):
+alleleWrap_2a_cnvnator_rd.sh
+print_addRDcpp.sh
+addCNV.cpp
+Makefile
+
 ```shell
 ./alleleWrap_2a_cnvnator_rd.sh m27 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m27.root m27.snv
 ./alleleWrap_2a_cnvnator_rd.sh m9 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m9.root m9.snv
