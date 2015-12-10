@@ -218,7 +218,7 @@ alleleWrap_2a_cnvnator_rd.sh
 print_addRDcpp.sh
 addCNV.cpp
 Makefile
-
+NOTE: This conversion process is horribly slow...
 ```shell
 ./alleleWrap_2a_cnvnator_rd.sh m27 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m27.root m27.snv
 ./alleleWrap_2a_cnvnator_rd.sh m9 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m9.root m9.snv
