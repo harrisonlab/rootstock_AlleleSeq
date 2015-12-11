@@ -191,6 +191,19 @@ Run vcf2snp on above output
 
 ..../AlleleSeq_pipeline_v1.2/vcf2snp beagle.vcf -c m27 >m27
 
+Maternal and paternal chromosomes will require indexing with bowtie for downstream steps.
+
+```shell
+bowtie2-build chr10_m116_paternal.fa,chr13_m116_paternal.fa,chr16_m116_paternal.fa,chr2_m116_paternal.fa,chr5_m116_paternal.fa,chr8_m116_paternal.fa,chr11_m116_paternal.fa,chr14_m116_paternal.fa,chr17_m116_paternal.fa,chr3_m116_paternal.fa,chr6_m116_paternal.fa,chr9_m116_paternal.fa,chr12_m116_paternal.fa,chr15_m116_paternal.fa,chr1_m116_paternal.fa,chr4_m116_paternal.fa,chr7_m116_paternal.fa m116_paternal_index
+
+bowtie2-build chr10_m116_maternal.fa,chr11_m116_maternal.fa,chr12_m116_maternal.fa,chr13_m116_maternal.fa,chr14_m116_maternal.fa,chr15_m116_maternal.fa,chr16_m116_maternal.fa,chr17_m116_maternal.fa,chr1_m116_maternal.fa,chr2_m116_maternal.fa,chr3_m116_maternal.fa,chr4_m116_maternal.fa,chr5_m116_maternal.fa,chr6_m116_maternal.fa,chr7_m116_maternal.fa,chr8_m116_maternal.fa,chr9_m116_maternal.fa m116_maternal_index
+
+bowtie2-build chr10_m27_maternal.fa,chr13_m27_maternal.fa,chr16_m27_maternal.fa,chr2_m27_maternal.fa,chr5_m27_maternal.fa,chr8_m27_maternal.fa,chr11_m27_maternal.fa,chr14_m27_maternal.fa,chr17_m27_maternal.fa,chr3_m27_maternal.fa,chr6_m27_maternal.fa,chr9_m27_maternal.fa,chr12_m27_maternal.fa,chr15_m27_maternal.fa,chr1_m27_maternal.fa,chr4_m27_maternal.fa,chr7_m27_maternal.fa m27_maternal_index
+
+bowtie2-build chr10_m27_paternal.fa,chr13_m27_paternal.fa,chr16_m27_paternal.fa,chr2_m27_paternal.fa,chr5_m27_paternal.fa,chr8_m27_paternal.fa,chr11_m27_paternal.fa,chr14_m27_paternal.fa,chr17_m27_paternal.fa,chr3_m27_paternal.fa,chr6_m27_paternal.fa,chr9_m27_paternal.fa,chr12_m27_paternal.fa,chr15_m27_paternal.fa,chr1_m27_paternal.fa,chr4_m27_paternal.fa,chr7_m27_paternal.fa m27_paternal_index
+
+```
+
 CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. Last statement creates $ROOTSYS.
 UPDATE - root should be installed using a local copy of pcre NOT the root (boom boom) installed version. It's not on the worker nodes and otherwise downstream processes (CNVnator) won't work on these nodes. 
 UPDATE2 - root reconfigured. Tor some reason the install ignores the prefix flag for the etc directory and tries to stick the files into /usr/local/etc, anyway the --etcdir flag can set this explicitly.
