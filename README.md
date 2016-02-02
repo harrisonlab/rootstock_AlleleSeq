@@ -212,8 +212,8 @@ echo >>full.phase
 cat m9.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
 echo >>full.phase
 ```
+To return snps from a subsection of one chromosome ( in this instance chr 5 between 1.2M and 36.5M bases) the following was run (using calc.pl):
 
-To return snps from a subsection of one chromosome (chr 5 in this instance) the following was run:
 ```shell
 echo 10 > chr5.int.phase
 grep "^5" <m13.snv|perl calc.pl - 1200000 36500000|wc -l >>chr5.int.phase
