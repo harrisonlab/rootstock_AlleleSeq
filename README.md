@@ -277,9 +277,10 @@ mkdir allele/03
 ~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/o3
 ```
 
-Run vcf2snp on beagle output to create list of snips
+Run vcf2snp on beagle output (or other vcf file) to create list of snps
+-c flag searches vcf file for given parameter (m27 in below)
 
-..../AlleleSeq_pipeline_v1.2/vcf2snp beagle.vcf -c m27 >m27.snv
+../AlleleSeq_pipeline_v1.2/vcf2snp ../beagle/beagle.vcf -c m27 >../allele/m27/m27.snv
 
 Maternal and paternal chromosomes will require indexing with bowtie for downstream steps.
 
