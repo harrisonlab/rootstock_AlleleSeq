@@ -7,6 +7,10 @@ samtools
 bcftools
 beagle
 
+$ROOTSTOCK was set to the directory containg the rootstock project (~/projects/apple_rootstock/rootstock_genetics)
+
+
+
 Data was unzipped and concatenated into R1 and R2 files in the subdirectory conc within each rootstock folder
 eg:
 ```shell
@@ -25,33 +29,28 @@ nohup fastqc gala_r1.fq gala_r2.fq &
 nohup fastqc o3_r1.fq o3_r2.fq &
 
  ```
- 
+
 Trimming was performed with fastq-mcf 
 ```shell
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/ 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/ 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/ 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/ 
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq  /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/ 
-
-./fastq-mcf.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r1.fq /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/
-
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r1.fq $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r2.fq $ROOTSTOCK/rootstock_genetics/m27/conc/ 
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r1.fq $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r2.fq $ROOTSTOCK/rootstock_genetics/m13/conc/ 
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r1.fq $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r2.fq $ROOTSTOCK/rootstock_genetics/m116/conc/ 
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r1.fq /$ROOTSTOCK/rootstock_genetics/m9/conc/m9_r2.fq $ROOTSTOCK/rootstock_genetics/m9/conc/ 
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r1.fq $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r2.fq $ROOTSTOCK/rootstock_genetics/mm106/conc/ 
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r1.fq $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r2.fq /$ROOTSTOCK/rootstock_genetics/gala/conc/
+./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/o3/conc/o3_r1.fq  $ROOTSTOCK/rootstock_genetics/o3/conc/ 
  ```
  
  Removal of phix
  ```shell
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/test_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/test/conc/ phix_filtered.sam 50 500
- 
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m27/conc/ phix_filtered 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m116/conc/ phix_filtered 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m9/conc/ phix_filtered 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/m13/conc/ phix_filtered 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/conc/ phix_filtered 250 500
-./bowtie.sh /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r1.fq.trim /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/gala/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m27/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m116/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m9/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m13/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r1.fq.trim $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/mm106/conc/ phix_filtered 250 500
+./bowtie.sh $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r1.fq.trim $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/gala/conc/ phix_filtered 250 500
 
-./bowtie_se.sh /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix /home/groups/harrisonlab/project_files/rootstock_genetics/o3/conc/ phix_filtered 
+./bowtie_se.sh $ROOTSTOCK/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/o3/conc/ phix_filtered 
 
  ```
   
