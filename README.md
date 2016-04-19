@@ -9,7 +9,7 @@ beagle
 
 $ROOTSTOCK was set to the directory containg the rootstock project (~/projects/apple_rootstock/rootstock_genetics)
 
-
+Folders for each rootstock was created in the rootstock_genetics folder
 
 Data was unzipped and concatenated into R1 and R2 files in the subdirectory conc within each rootstock folder
 eg:
@@ -30,25 +30,26 @@ nohup fastqc o3_r1.fq o3_r2.fq &
 
  ```
 
-Trimming was performed with fastq-mcf 
+Trimming was performed with fastq-mcf (o3 is SE)
 ```shell
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r1.fq $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r2.fq $ROOTSTOCK/rootstock_genetics/m27/conc/ 
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r1.fq $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r2.fq $ROOTSTOCK/rootstock_genetics/m13/conc/ 
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r1.fq $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r2.fq $ROOTSTOCK/rootstock_genetics/m116/conc/ 
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r1.fq /$ROOTSTOCK/rootstock_genetics/m9/conc/m9_r2.fq $ROOTSTOCK/rootstock_genetics/m9/conc/ 
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r1.fq $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r2.fq $ROOTSTOCK/rootstock_genetics/mm106/conc/ 
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r1.fq $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r2.fq /$ROOTSTOCK/rootstock_genetics/gala/conc/
-./fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/o3/conc/o3_r1.fq  $ROOTSTOCK/rootstock_genetics/o3/conc/ 
+cd $ROOTSTOCK/rootstock_genetics
+
+for d in [mg]*;
+ do
+  $ROOTSTOCK/scripts/fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/$d/conc/${d}_r1.fq $ROOTSTOCK/rootstock_genetics/$d/conc/${d}_r2.fq $ROOTSTOCK/rootstock_genetics/$d/conc/  
+ done
+
+$ROOTSTOCK/scripts//fastq-mcf.sh $ROOTSTOCK/rootstock_genetics/o3/conc/o3_r1.fq  $ROOTSTOCK/rootstock_genetics/o3/conc/ 
  ```
  
  Removal of phix
  ```shell
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m27/conc/m27_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m27/conc/ phix_filtered 250 500
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m116/conc/m116_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m116/conc/ phix_filtered 250 500
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m9/conc/m9_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m9/conc/ phix_filtered 250 500
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r1.fq.trim $ROOTSTOCK/rootstock_genetics/m13/conc/m13_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/m13/conc/ phix_filtered 250 500
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r1.fq.trim $ROOTSTOCK/rootstock_genetics/mm106/conc/mm106_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/mm106/conc/ phix_filtered 250 500
-./bowtie.sh $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r1.fq.trim $ROOTSTOCK/rootstock_genetics/gala/conc/gala_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/gala/conc/ phix_filtered 250 500
+ cd $ROOTSTOCK/rootstock_genetics
+
+for d in [mg]*;
+ do
+  $ROOTSTOCK/scripts/bowtie.sh $ROOTSTOCK/rootstock_genetics/$d/conc/${d}_r1.fq.trim $ROOTSTOCK/rootstock_genetics/$d/conc/${d}_r2.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/$d/conc/ phix_filtered 250 500 
+ done
 
 ./bowtie_se.sh $ROOTSTOCK/rootstock_genetics/o3/conc/o3_r1.fq.trim /home/groups/harrisonlab/ref_genomes/phix/phix $ROOTSTOCK/rootstock_genetics/o3/conc/ phix_filtered 
 
