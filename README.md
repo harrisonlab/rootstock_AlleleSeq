@@ -148,7 +148,7 @@ Note SHAPE could also be used- one advantage here is it can be 'read aware'  htt
 ```shell
 java –Xmx 12000m –jar beagle.jar gt=./beagle/flt_all_piledup.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
-##IBM analysis
+##Identity by descent calling
 java -jar ~/projects/apple_rootstock/scripts/beagle.r1399.jar gtgl=ibdtest.vcf out=outibd.vcf ibd=true ibdtrim=80 ped=pedigree.ped
 
 #samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
