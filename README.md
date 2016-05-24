@@ -132,12 +132,12 @@ cat all_piledup.vcf|vcfutils.pl varFilter -d100 > flt_all_piledup.vcf
 Define the pedigree for beagle
 1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
 
-m116 1 2 3
-mm106 2 0 0
-m27 3 5 6
-o3 4 6 0
-m13 5 0 0
-m9 6 0 0
+m116 m116 mm106 m27 
+mm106 mm106 0 0
+m27 m27 m13 m9 
+m13 m13 0 0
+m9 m9 0 0
+o3 o3 0 0
 
 NB- To generate a whole consensus sequence
 samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq > cns.fq i 
@@ -145,12 +145,15 @@ samtools mpileup -uf ref.fa aln.bam | bcftools view -cg - | vcfutils.pl vcf2fq >
 ##Phasing with Beagle
 http://faculty.washington.edu/browning/beagle_utilities/utilities.html
 Note SHAPE could also be used- one advantage here is it can be 'read aware'  https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#readaware
+
+NOTE: The beagle pedigree file does not conform with the pedigree file Linkage-format and requires the pedigree ID and individual ID to be the same.
+
 ```shell
-java –Xmx 12000m –jar beagle.jar gt=./beagle/flt_all_piledup.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
-##Identity by descent calling
-java -jar ~/projects/apple_rootstock/scripts/beagle.r1399.jar gtgl=ibdtest.vcf out=outibd.vcf ibd=true ibdtrim=80 ped=pedigree.ped
+ java -jar $ROOTSTOCK/scripts/beagle.r1399.jar gt=corrected_sort_root.vcf ped=pedigree.ped out=beagle phase-its=8 overlap=1000000 window=5000000  ibd=true
 
+
+#java –Xmx 12000m –jar beagle.jar gt=./beagle/flt_all_piledup.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 #samtools mpileup -uf ref.fa aln1.bam aln2.bam | bcftools view -bvcg - > var.raw.bcf
 #bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
 #java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
@@ -257,32 +260,58 @@ The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator
 looks like a good pipline to follow. 
 The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
 
-downloaded vcf2diploid
+### Make diploid genomes from VCF
+
+Downloaded vcf2diploid
 requires that output directories are created before running command
 Using local copy of Java 1.7 
 
+##### pipeline samples
 ```shell
+
 mkdir allele/m27
 mkdir allele/m116
+
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m27
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m116
+
+```
+##### All other samples
+```shell
 mkdir allele/m9
 mkdir allele/m13
 mkdir allele/m106
 mkdir allele/gala
 mkdir allele/03
 
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m27
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m116
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m9
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m13
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m106
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/gala
-~/usr/bin/java -jar vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/o3
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m9
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m13
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m106
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/gala
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/o3
 ```
 
-Run vcf2snp on beagle output (or other vcf file) to create list of snps
--c flag searches vcf file for given parameter (m27 in below)
 
-../AlleleSeq_pipeline_v1.2/vcf2snp ../beagle/beagle.vcf -c m27 >../allele/m27/m27.snv
+### Get varant from VCF
+
+Run vcf2snp on beagle output (or other vcf file) to create list of snps
+-c flag searches vcf file for given sample name
+
+##### pipeline samples
+```shell
+$ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle/beagle.vcf -c m27 > $ROOTSTOCK/allele/m27/m27.snv
+$ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle/beagle.vcf -c m116 > $ROOTSTOCK/allele/m116/m116.snv
+```
+
+##### all other samples
+```shell
+$ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle/beagle.vcf -c mm106 > $ROOTSTOCK/allele/mm106/mm106.snv
+
+$ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle/beagle.vcf -c m13 > $ROOTSTOCK/allele/m13/m13.snv
+$ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle/beagle.vcf -c m9 > $ROOTSTOCK/allele/m9/m9.snv
+```
+
+### Make maternal and paternal indices
 
 Maternal and paternal chromosomes will require indexing with bowtie for downstream steps.
 
@@ -297,44 +326,60 @@ bowtie2-build chr10_m27_paternal.fa,chr13_m27_paternal.fa,chr16_m27_paternal.fa,
 
 ```
 
-CNVnator requires ROOT (https://root.cern.ch). Ver 6.x of ROOT is depedent on gcc v.=>4.8. V5 can be installed with gcc v. <4.8. However it does require some X11 librabries. For 64_x86 arch the below configure will remove this dependency. Last statement creates $ROOTSYS.
-UPDATE - root should be installed using a local copy of pcre NOT the root (boom boom) installed version. It's not on the worker nodes and otherwise downstream processes (CNVnator) won't work on these nodes. 
-UPDATE2 - root reconfigured. Tor some reason the install ignores the prefix flag for the etc directory and tries to stick the files into /usr/local/etc, anyway the --etcdir flag can set this explicitly.
+### Find CNVs
+Using  CNVnator. This requires ROOT (https://root.cern.ch).
+
+##### ROOT install
+V 6.x won't intall on current cluster due to incorrect gcc version.
+Installed with version5. 
+
 ```shell
 ./configure linuxx8664gcc --prefix=/home/deakig/usr/local --etcdir=/home/usr/local/etc --with-python-libdir=/usr/lib --with-python-incdir=/usr/include --enable-builtin-pcre --disable-x11 
 make
 make install
+
+```
+
+UPDATE - root should be installed using a local copy of pcre NOT the root (boom boom) installed version. It is not on the worker nodes and otherwise downstream processes (CNVnator) will not work on these nodes. 
+UPDATE2 - root reconfigured. For some reason the install ignores the prefix flag for the etc directory and tries to stick the files into /usr/local/etc, anyway the --etcdir flag can set this explicitly.
+
+##### ROOTSYS (run each time)
+
+The below sets ROOTSYS for each session (required for pipeline to work correctly)
+
+```shell
 . ~/usr/local/bin/thisroot.sh
 ```
 
-Run CNVnator with below:
+##### CNVnator
+Ran CNVnator with below:
  
 ```shell
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele/m116.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m13/allele/m13.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m13/analysis_v1/m13_v1.sorted.bam
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele/m27.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/m9/allele/m9.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/m9/analysis_v1/m9_v1.sorted.bam
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/allele/mm106.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/mm106/analysis_v1/mm106_v1.sorted.bam
-./cnvnator -root /home/groups/harrisonlab/project_files/rootstock_genetics/o3/allele/o3.root -tree /home/groups/harrisonlab/project_files/rootstock_genetics/o3/analysis_v1/o3_v1.sorted.bam
+./cnvnator -root $ROOTSTOCK/allele/m116/m116.root -tree $ROOTSTOCK/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
+./cnvnator -root $ROOTSTOCK/allele/m27/m27.root -tree $ROOTSTOCK/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
 ```
 
+##### Convert to AlleleSeq format
+
 Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this.
-The wrapper script was edited to reflect our environment and the makefile needed editing to reflect the locaction of root (root puts its files in a root folder under lib/include). This pipeline makes a build specific to each root file, therefore the following files were copied to directories for each rootstock (e.g. m27_alleleSeq_cnvScript):
+The wrapper script was edited to reflect our environment and the makefile needed editing to reflect the locaction of root (root puts its files in a root folder under lib/include). 
+
+This pipeline makes a build specific to each root file, therefore the following files were copied from $ROOTSTOCK/alleleSeq_cnvScript to $ROOTSTOCK/allele/m27/m27_alleleSeq_cnvScript and $ROOTSTOCK/allele/m116/m116_alleleSeq_cnvScript:
 alleleWrap_2a_cnvnator_rd.sh
 print_addRDcpp.sh
 addCNV.cpp
 Makefile
+
+Run from cnvScript folder for given rootstock
 NOTE: This conversion process is horribly slow...
 ```shell
-./alleleWrap_2a_cnvnator_rd.sh m27 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m27.root m27.snv
-./alleleWrap_2a_cnvnator_rd.sh m9 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m9.root m9.snv
-./alleleWrap_2a_cnvnator_rd.sh m13 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m13.root m13.snv
-./alleleWrap_2a_cnvnator_rd.sh mm106 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas mm106.root mm106.snv
-./alleleWrap_2a_cnvnator_rd.sh m116 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas m116.root m116.snv
-./alleleWrap_2a_cnvnator_rd.sh o3 /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/fastas o3.root o3.snv
+./alleleWrap_2a_cnvnator_rd.sh m27 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m27.root m27.snv
+
+./alleleWrap_2a_cnvnator_rd.sh m116 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m116.root m116.snv
+
 ```
 
-AlleleSeq pipeline
+### AlleleSeq pipeline
 
 The following files were modified:
 PIPELINE.mk (this is specific to each run)
