@@ -269,30 +269,29 @@ Using local copy of Java 1.7
 ##### pipeline samples
 ```shell
 
-mkdir allele/m27
-mkdir allele/m116
+mkdir $ROOTSTOCK/allele/m27
+mkdir $ROOTSTOCK/allele/m116
 
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m27
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m116
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m27 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/m27
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m116 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/m116
 
 ```
 ##### All other samples
 ```shell
-mkdir allele/m9
-mkdir allele/m13
-mkdir allele/m106
-mkdir allele/gala
-mkdir allele/03
+mkdir $ROOTSTOCK/allele/m9
+mkdir $ROOTSTOCK/allele/m13
+mkdir $ROOTSTOCK/allele/m106
+mkdir $ROOTSTOCK/allele/gala
+mkdir $ROOTSTOCK/allele/03
 
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m9
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m13
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/m106
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/gala
-~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir allele/o3
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m9 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/m9
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id m13 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/m13
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id mm106 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/m106
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id gala -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/gala
+~/usr/bin/java -jar $ROOTSTOCK/vcf2diploid/vcf2diploid.jar -id o3 -chr ~/Data/apple/Malus_x_domestica.v1.0-primary.pseudo.fa -vcf beagle.vcf -outDir $ROOTSTOCK/allele/o3
 ```
 
-
-### Get varant from VCF
+### Get variants from VCF
 
 Run vcf2snp on beagle output (or other vcf file) to create list of snps
 -c flag searches vcf file for given sample name
@@ -316,14 +315,37 @@ $ROOTSTOCK/AlleleSeq_pipeline_v1.2/vcf2snp $ROOTSTOCKS/rootstock_genetics/beagle
 Maternal and paternal chromosomes will require indexing with bowtie for downstream steps.
 
 ```shell
-bowtie2-build chr10_m116_paternal.fa,chr13_m116_paternal.fa,chr16_m116_paternal.fa,chr2_m116_paternal.fa,chr5_m116_paternal.fa,chr8_m116_paternal.fa,chr11_m116_paternal.fa,chr14_m116_paternal.fa,chr17_m116_paternal.fa,chr3_m116_paternal.fa,chr6_m116_paternal.fa,chr9_m116_paternal.fa,chr12_m116_paternal.fa,chr15_m116_paternal.fa,chr1_m116_paternal.fa,chr4_m116_paternal.fa,chr7_m116_paternal.fa m116_paternal_index
+mkdir $ROOTSTOCK/allele/m116/pat
+cd $ROOTSTOCK/allele/m116/pat
+ln -s ../*paternal.fa .
+ref=""
+for f in *.fa;do ref=$(echo $ref,$f); done
+ref=$(echo ${ref#?})
+bowtie2-build $(echo $ref) m116_paternal_index
 
-bowtie2-build chr10_m116_maternal.fa,chr11_m116_maternal.fa,chr12_m116_maternal.fa,chr13_m116_maternal.fa,chr14_m116_maternal.fa,chr15_m116_maternal.fa,chr16_m116_maternal.fa,chr17_m116_maternal.fa,chr1_m116_maternal.fa,chr2_m116_maternal.fa,chr3_m116_maternal.fa,chr4_m116_maternal.fa,chr5_m116_maternal.fa,chr6_m116_maternal.fa,chr7_m116_maternal.fa,chr8_m116_maternal.fa,chr9_m116_maternal.fa m116_maternal_index
+mkdir $ROOTSTOCK/allele/m116/mat
+cd $ROOTSTOCK/allele/m116/mat
+ln -s ../*maternal.fa .
+ref=""
+for f in *.fa;do ref=$(echo $ref,$f); done
+ref=$(echo ${ref#?})
+bowtie2-build $(echo $ref) m116_maternal_index
 
-bowtie2-build chr10_m27_maternal.fa,chr13_m27_maternal.fa,chr16_m27_maternal.fa,chr2_m27_maternal.fa,chr5_m27_maternal.fa,chr8_m27_maternal.fa,chr11_m27_maternal.fa,chr14_m27_maternal.fa,chr17_m27_maternal.fa,chr3_m27_maternal.fa,chr6_m27_maternal.fa,chr9_m27_maternal.fa,chr12_m27_maternal.fa,chr15_m27_maternal.fa,chr1_m27_maternal.fa,chr4_m27_maternal.fa,chr7_m27_maternal.fa m27_maternal_index
+mkdir $ROOTSTOCK/allele/m27/pat
+cd $ROOTSTOCK/allele/m27/pat
+ln -s ../*paternal.fa .
+ref=""
+for f in *.fa;do ref=$(echo $ref,$f); done
+ref=$(echo ${ref#?})
+bowtie2-build $(echo $ref) m27_paternal_index
 
-bowtie2-build chr10_m27_paternal.fa,chr13_m27_paternal.fa,chr16_m27_paternal.fa,chr2_m27_paternal.fa,chr5_m27_paternal.fa,chr8_m27_paternal.fa,chr11_m27_paternal.fa,chr14_m27_paternal.fa,chr17_m27_paternal.fa,chr3_m27_paternal.fa,chr6_m27_paternal.fa,chr9_m27_paternal.fa,chr12_m27_paternal.fa,chr15_m27_paternal.fa,chr1_m27_paternal.fa,chr4_m27_paternal.fa,chr7_m27_paternal.fa m27_paternal_index
-
+mkdir $ROOTSTOCK/allele/m27/mat
+cd $ROOTSTOCK/allele/m27/mat
+ln -s ../*maternal.fa .
+ref=""
+for f in *.fa;do ref=$(echo $ref,$f); done
+ref=$(echo ${ref#?})
+bowtie2-build $(echo $ref) m27_maternal_index
 ```
 
 ### Find CNVs
