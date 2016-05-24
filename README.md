@@ -413,37 +413,38 @@ Updated allelseq pipeline to use Bowtie2 and accept paired-end read data. filter
 Trim RNA_Seq data
 
 ```shell
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/02-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/03-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/04-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/04-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/05-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_3/05-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/06-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/06-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/07-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/07-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
-./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/13-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+for d in $ROOTSTOCK/rna-seq/RNAseq*
+do
+ for f in ${d}/fastq/*1.fq.gz
+ do
+  r=$(echo $f|sed 's/_L1_1/_L1_2/')
+  $ROOTSTOCK/scripts/fastq-mcf.sh $f $r $ROOTSTOCK/rootstock_genetics/ref/v1/Md ${d}/
+ done
+done
  ```
-
 Created soft links to RNA-seq files in Alleleseq pipeline folder.
 Ran Alleleseq pipeline with following:
 
 ```shell
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 02-RNA_L1_1.fq.trim 02-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S2_16T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 03-RNA_L1_1.fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 04-RNA_L1_1.fq.trim 04-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S4_17T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 05-RNA_L1_1.fq.trim 05-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S5_17B_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 06-RNA_L1_1.fq.trim 06-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S6_19T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m27/allele 07-RNA_L1_1.fq.trim 07-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S7_19B_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 08-RNA_L1_1.fq.trim 08-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S8_6T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 09-RNA_L1_1.fq.trim 09-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S9_6B_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 10-RNA_L1_1.fq.trim 10-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S10_8T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 11-RNA_L1.1.fq.trim 11-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S11_8B_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 12-RNA_L1.1.fq.trim 12-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S12_10T_hits.txt
-./pipeline.sh /home/groups/harrisonlab/project_files/rootstock_genetics/m116/allele 13-RNA_L1.1.fq.trim 13-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S13_10B_hits.txt
+#rootstocks
+./pipeline.sh $ROOTSTOCK/allele/m27 03-RNA_L1_1.fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m27 05-RNA_L1_1.fq.trim 05-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S5_17B_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m27 07-RNA_L1_1.fq.trim 07-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S7_19B_hits.txt
+
+./pipeline.sh $ROOTSTOCK/allele/m116 09-RNA_L1_1.fq.trim 09-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S9_6B_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m116 11-RNA_L1.1.fq.trim 11-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S11_8B_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m116 13-RNA_L1.1.fq.trim 13-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S13_10B_hits.txt
+
+#gala
+./pipeline.sh $ROOTSTOCK/allele/m27 02-RNA_L1_1.fq.trim 02-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S2_16T_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m27 04-RNA_L1_1.fq.trim 04-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S4_17T_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m27 06-RNA_L1_1.fq.trim 06-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S6_19T_hits.txt
+
+./pipeline.sh $ROOTSTOCK/allele/m116 08-RNA_L1_1.fq.trim 08-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S8_6T_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m116 10-RNA_L1_1.fq.trim 10-RNA_L1_2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S10_8T_hits.txt
+./pipeline.sh $ROOTSTOCK/allele/m116 12-RNA_L1.1.fq.trim 12-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S12_10T_hits.txt
 ```
+
 
 
 ##QTL filtering
@@ -497,4 +498,21 @@ samtools mpileup -uf ./ref/Malus_x_domestica.v2.0-pht_assembly.fa  ./m9/analysis
 bcftools view -bvcg pileup.bam > ./vcf/var.raw.bcf
 bcftools view ./vcf/var.raw.bcf | vcfutils.pl varFilter -D100 > ./beagle/var.flt.vcf
 
+```
+
+
+Trim ASE 
+```shell
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_3/02-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_3/02-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md $ROOTSTOCK/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_3/03-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_3/03-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md $ROOTSTOCK/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_3/04-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_3/04-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md $ROOTSTOCK/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_3/05-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_3/05-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md $ROOTSTOCK/rna-seq/RNAseq_2/
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_2/06-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_2/06-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md $ROOTSTOCK/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh $ROOTSTOCK/rna-seq/RNAseq_2/07-RNA_L1_1.fq $ROOTSTOCK/rna-seq/RNAseq_2/07-RNA_L1_2.fq $ROOTSTOCK/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/08-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/09-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/10-RNA_L1_2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/11-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
+./fastq-mcf.sh /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/12-RNA_L1.1.fq /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_1/13-RNA_L1.2.fq /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Md /home/deakig/projects/apple_rootstock/rna-seq/RNAseq_2/ 
 ```
