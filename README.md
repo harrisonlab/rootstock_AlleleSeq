@@ -132,9 +132,9 @@ cat all_piledup.vcf|vcfutils.pl varFilter -d100 > flt_all_piledup.vcf
 Define the pedigree for beagle
 1) pedigree ID, 2) individual ID, 3) father’s ID, and 4) mother’s ID
 
-m116 m116 mm106 m27 
+m116 m116 mm106 m27
 mm106 mm106 0 0
-m27 m27 m13 m9 
+m27 m27 m13 m9
 m13 m13 0 0
 m9 m9 0 0
 o3 o3 0 0
