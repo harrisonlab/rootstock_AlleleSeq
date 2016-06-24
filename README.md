@@ -392,10 +392,11 @@ print_addRDcpp.sh
 addCNV.cpp
 Makefile
 
-* well that's according to the manual, but addCNV (which creates the cnv format file) accepts the snv not root file as input. 
 
 Run from cnvScript folder for given rootstock
 NOTE: This conversion process is horribly slow...
+* well that's according to the manual, but addCNV (which creates the cnv format file) accepts the snv as well as the root file as input. I'm guessing it does some extra <i>stuff<\i> which is taking the time.
+
 ```shell
 $ROOTSTOCK/alleleSeq_cnvScript/alleleWrap_2a_cnvnator_rd.sh m27 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m27.root m27.snv
 
