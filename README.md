@@ -383,7 +383,7 @@ $ROOTSTOCK/CNVnator_v0.3/src/cnvnator -root $ROOTSTOCK/allele/m27/m27.root -tree
 
 ##### Convert to AlleleSeq format
 
-Output is in ROOT format which needs to be converted to an AlleleSeq CNV format. alleleSeq_cnvScript can do this.
+Output is in ROOT format which needs to be converted to an AlleleSeq CNV format*. alleleSeq_cnvScript can do this.
 The wrapper script was edited to reflect our environment and the makefile needed editing to reflect the locaction of root (root puts its files in a root folder under lib/include). 
 
 This pipeline makes a build specific to each root file, therefore the following files were copied from $ROOTSTOCK/alleleSeq_cnvScript to $ROOTSTOCK/allele/m27/m27_alleleSeq_cnvScript and $ROOTSTOCK/allele/m116/m116_alleleSeq_cnvScript:
@@ -391,6 +391,8 @@ alleleWrap_2a_cnvnator_rd.sh
 print_addRDcpp.sh
 addCNV.cpp
 Makefile
+
+* well that's according to the manual, but addCNV (which creates the cnv format file) accepts the snv not root file as input. 
 
 Run from cnvScript folder for given rootstock
 NOTE: This conversion process is horribly slow...
