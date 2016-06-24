@@ -377,8 +377,8 @@ The below sets ROOTSYS for each session (required for pipeline to work correctly
 Ran CNVnator with below:
  
 ```shell
-./cnvnator -root $ROOTSTOCK/allele/m116/m116.root -tree $ROOTSTOCK/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
-./cnvnator -root $ROOTSTOCK/allele/m27/m27.root -tree $ROOTSTOCK/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
+$ROOTSTOCK/CNVnator_v0.3/src/cnvnator -root $ROOTSTOCK/allele/m116/m116.root -tree $ROOTSTOCK/rootstock_genetics/m116/analysis_v1/m116_v1.sorted.bam
+$ROOTSTOCK/CNVnator_v0.3/src/cnvnator -root $ROOTSTOCK/allele/m27/m27.root -tree $ROOTSTOCK/rootstock_genetics/m27/analysis_v1/m27_v1.sorted.bam
 ```
 
 ##### Convert to AlleleSeq format
