@@ -395,9 +395,9 @@ Makefile
 Run from cnvScript folder for given rootstock
 NOTE: This conversion process is horribly slow...
 ```shell
-./alleleWrap_2a_cnvnator_rd.sh m27 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m27.root m27.snv
+$ROOTSTOCK/alleleSeq_cnvScript/alleleWrap_2a_cnvnator_rd.sh m27 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m27.root m27.snv
 
-./alleleWrap_2a_cnvnator_rd.sh m116 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m116.root m116.snv
+$ROOTSTOCK/alleleSeq_cnvScript/alleleWrap_2a_cnvnator_rd.sh m116 $ROOTSTOCK/rootstock_genetics/ref/v1/fastas m116.root m116.snv
 
 ```
 
