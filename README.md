@@ -426,7 +426,7 @@ do
  done
 done
  ```
-Created soft links to RNA-seq files in Alleleseq pipeline folder.
+Created soft links to RNA-seq files in Alleleseq pipeline folder (links.sh).
 Ran Alleleseq pipeline with following:
 
 ```shell
