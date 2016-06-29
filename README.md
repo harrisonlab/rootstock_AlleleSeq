@@ -431,7 +431,7 @@ Ran Alleleseq pipeline with following:
 
 ```shell
 #rootstocks
-$ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m27 03-RNA_L1_1_fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
+$ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m27 03-RNA_L1_1.fq.trim 03-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S3_16B_hits.txt
 $ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m27 05-RNA_L1_1.fq.trim 05-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S5_17B_hits.txt
 $ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m27 07-RNA_L1_1.fq.trim 07-RNA_L1_2.fq.trim m27_paternal_index m27_maternal_index m27.snv m27.snv.cnv m27.map m27_S7_19B_hits.txt
 
