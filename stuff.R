@@ -2,13 +2,18 @@
 # grep ^5 03-RNA_L1_1.fq.trim.counts.txt >S3_chr5
 # grep ^5 05-RNA_L1_1.fq.trim.counts.txt >S5_chr5
 # grep ^5 07-RNA_L1_1.fq.trim.counts.txt >S7_chr5
-
 options(stringsAsFactors = FALSE)
-S3 <- read.table("S3_chr5",header=F,sep="\t")
-S5 <- read.table("S5_chr5",header=F,sep="\t")
-S7 <- read.table("S7_chr5",header=F,sep="\t")
-x1 <- merge(S3[,c(2,7:16)],S5[,c(2,7:16)],all=T,by.x="V2",by.y="V2")
-x2 <- merge(x1,S7[,c(2,7:16)],all=T,by.x="V2",by.y="V2")
+
+args <- commandArgs(TRUE) 
+args[1] <- "S9_chr5"
+args[2] <- "S11_chr5"
+args[3] <- "S13_chr5"
+
+t1 <- read.table(args[1],header=F,sep="\t")
+t2 <- read.table(args[2],header=F,sep="\t")
+t3 <- read.table(args[3],header=F,sep="\t")
+x1 <- merge(t1[,c(2,7:16)],t2[,c(2,7:16)],all=T,by.x="V2",by.y="V2")
+x2 <- merge(x1,t3[,c(2,7:16)],all=T,by.x="V2",by.y="V2")
 
 myfunc <- function(v) {
   n=""
