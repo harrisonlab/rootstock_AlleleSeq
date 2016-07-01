@@ -34,11 +34,12 @@ x2$C_sum <- rowSums(x2[,c(6,16,26)])
 x2$G_sum <- rowSums(x2[,c(7,17,27)])
 x2$T_sum <- rowSums(x2[,c(8,18,28)])
 
-x2$S3_padj <- x2[,11]
-x2$S3_dtl <- paste(x2[,10],x2[,5],x2[,6],x2[,7],x2[,8],sep=":")
-x2$S5_padj <- x2[,21]
+
+x2$S3_dtl <- paste(x2[,10],x2[,5],x2[,6],x2[,7],x2[,8],sep=":") # Sx..
 x2$S5_dtl <- paste(x2[,20],x2[,15],x2[,16],x2[,17],x2[,18],sep=":")
-x2$S7_padj <- x2[,31]
 x2$S7_dtl <- paste(x2[,30],x2[,25],x2[,26],x2[,27],x2[,28],sep=":")
+x2$S3_padj <- x2[,11]
+x2$S5_padj <- x2[,21]
+x2$S7_padj <- x2[,31]
 
 x3 <- x2[,32:45]
