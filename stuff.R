@@ -5,9 +5,9 @@
 options(stringsAsFactors = FALSE)
 
 args <- commandArgs(TRUE) 
-args[1] <- "S9_chr5"
-args[2] <- "S11_chr5"
-args[3] <- "S13_chr5"
+args[1] <- "S3_chr11"
+args[2] <- "S5_chr11"
+args[3] <- "S7_chr11"
 
 t1 <- read.table(args[1],header=F,sep="\t")
 t2 <- read.table(args[2],header=F,sep="\t")
@@ -43,3 +43,7 @@ x2$S5_padj <- x2[,21]
 x2$S7_padj <- x2[,31]
 
 x3 <- x2[,32:45]
+
+x3[x3$S3_dtl=="0:0:0:0:0",12] <- 1
+x3[x3$S5_dtl=="0:0:0:0:0",13] <- 1
+x3[x3$S7_dtl=="0:0:0:0:0",14] <- 1
