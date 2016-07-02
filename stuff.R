@@ -1,13 +1,13 @@
-# shell stuff
+# shell stuff 
 # grep ^5 03-RNA_L1_1.fq.trim.counts.txt >S3_chr5
 # grep ^5 05-RNA_L1_1.fq.trim.counts.txt >S5_chr5
 # grep ^5 07-RNA_L1_1.fq.trim.counts.txt >S7_chr5
-options(stringsAsFactors = FALSE)
 
+options(stringsAsFactors = FALSE)
 args <- commandArgs(TRUE) 
-args[1] <- "S3_chr11"
-args[2] <- "S5_chr11"
-args[3] <- "S7_chr11"
+args[1] <- "S9_chr11"
+args[2] <- "S11_chr11"
+args[3] <- "S13_chr11"
 
 t1 <- read.table(args[1],header=F,sep="\t")
 t2 <- read.table(args[2],header=F,sep="\t")
@@ -35,15 +35,15 @@ x2$G_sum <- rowSums(x2[,c(7,17,27)])
 x2$T_sum <- rowSums(x2[,c(8,18,28)])
 
 
-x2$S3_dtl <- paste(x2[,10],x2[,5],x2[,6],x2[,7],x2[,8],sep=":") # Sx..
-x2$S5_dtl <- paste(x2[,20],x2[,15],x2[,16],x2[,17],x2[,18],sep=":")
-x2$S7_dtl <- paste(x2[,30],x2[,25],x2[,26],x2[,27],x2[,28],sep=":")
-x2$S3_padj <- x2[,11]
-x2$S5_padj <- x2[,21]
-x2$S7_padj <- x2[,31]
+x2$S9_dtl <- paste(x2[,10],x2[,5],x2[,6],x2[,7],x2[,8],sep=":") # Sx..
+x2$S11_dtl <- paste(x2[,20],x2[,15],x2[,16],x2[,17],x2[,18],sep=":")
+x2$S13_dtl <- paste(x2[,30],x2[,25],x2[,26],x2[,27],x2[,28],sep=":")
+x2$S9_padj <- x2[,11]
+x2$S11_padj <- x2[,21]
+x2$S13_padj <- x2[,31]
 
 x3 <- x2[,32:45]
 
-x3[x3$S3_dtl=="0:0:0:0:0",12] <- 1
-x3[x3$S5_dtl=="0:0:0:0:0",13] <- 1
-x3[x3$S7_dtl=="0:0:0:0:0",14] <- 1
+x3[x3$S9_dtl=="0:0:0:0:0",12] <- 1
+x3[x3$S11_dtl=="0:0:0:0:0",13] <- 1
+x3[x3$S13_dtl=="0:0:0:0:0",14] <- 1
