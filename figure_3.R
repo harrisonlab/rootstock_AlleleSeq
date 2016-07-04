@@ -29,6 +29,13 @@ downstream <- function(X,pos,dist) {
 	,]
 }
 
+ev <- function(p,a) {
+	if(p<=a) {
+		return(1)
+	} else {
+		return(0)
+	}
+}
 
 genes <- read.table("qtl_genes",header=T,sep="\t")
 exons <- read.table("qtl_exons",header=T,sep="\t")
@@ -41,15 +48,8 @@ exons <- read.table("qtl_exons",header=T,sep="\t")
 #m116_chr13.txt
 
 alpha = 0.05
-t1 <- read.table("m27_chr5.txt",header=T,sep="\t")
-
-ev <- function(p,a) {
-	if(p<=a) {
-		return(1)
-	} else {
-		return(0)
-	}
-}
+x="m116_chr13.txt"
+t1 <- read.table(x,header=T,sep="\t")
 
 t1$evidence <- apply(t1[,12:14],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
 phased <- t1[t1[,2]=="PHASED"&t1$evidence>=2,] 
@@ -63,6 +63,9 @@ phased_genes <- ldply(phased_genes,data.frame)
 ##collapse to  unique plus number of snps per gene
 unique_phased_genes <- ddply(phased_genes,.(Gene_ID),nrow)
 colnames(unique_phased_genes)[2] <- "snp_count"
+unique_phased_genes <- merge(unique_phased_genes,genes,all.x=T)
+xx <- paste(x,".phased_genes.txt",sep="")
+write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
 
 ##get unique phased exons
 phased_exons <- apply(phased,1,function(x) within(exons,x[1]))
