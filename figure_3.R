@@ -37,7 +37,7 @@ ev <- function(p,a) {
 	}
 }
 
-genes <- read.table("qtl_genes",header=T,sep="\t")
+genes <- read.table("qtl13_genes",header=T,sep="\t")
 exons <- read.table("qtl_exons",header=T,sep="\t")
 
 #m27_chr5.txt
@@ -48,7 +48,7 @@ exons <- read.table("qtl_exons",header=T,sep="\t")
 #m116_chr13.txt
 
 alpha = 0.05
-x="m116_chr13"
+x="m27_chr13"
 t1 <- read.table(paste(x,".txt",sep=""),header=T,sep="\t")
 
 t1$evidence <- apply(t1[,12:14],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
