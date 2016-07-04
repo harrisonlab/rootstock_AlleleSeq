@@ -1,6 +1,5 @@
 library(plyr)
 
-
 between <- function(X,pos,dist) {
 	X[
 		(X$direction=="forward"&X[,1]>=(pos-dist)&X[,2]<=(pos+dist)) |
@@ -32,10 +31,27 @@ downstream <- function(X,pos,dist) {
 
 genes <- read.table("qtl_genes",header=T,sep="\t")
 exons <- read.table("qtl_exons",header=T,sep="\t")
-phased <- read.table("phased",header=T,sep="\t") ## phased snps showing significant allelic expression differences
-snps <- read.table("../snps/ver2/m27.snv",header=F,sep="\t")
-snps <- snps[snps$V1==5,]
 
+#m27_chr5.txt
+#m27_chr11.txt
+#m27_chr13.txt
+#m116_chr5.txt - dw1 is not present in m116
+#m116_chr11.txt
+#m116_chr13.txt
+
+alpha = 0.05
+t1 <- read.table("m27_chr5.txt",header=T,sep="\t")
+
+ev <- function(p,a) {
+	if(p<=a) {
+		return(1)
+	} else {
+		return(0)
+	}
+}
+
+t1$evidence <- apply(t1[,c(9,11,13)],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
+phased <- t1[t1[,2]=="PHASED"&&t1$evidence>=2,] 
 
 #list of genes and exons containing phased snps
 
