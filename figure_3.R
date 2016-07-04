@@ -1,3 +1,4 @@
+options(stringsAsFactors = FALSE)
 library(plyr)
 
 between <- function(X,pos,dist) {
