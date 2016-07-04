@@ -67,6 +67,18 @@ unique_phased_genes <- merge(unique_phased_genes,genes,all.x=T)
 xx <- paste(x,"_phased_genes.txt",sep="")
 write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
 
+### This is fairly pointless - but as I've already saved the phased genes...
+m27_pg_q5 <- read.table("m27_chr5_phased_genes.txt",header=T,sep="\t")
+m27_pg_q11 <- read.table("m27_chr11_phased_genes.txt",header=T,sep="\t")
+m27_pg_q13 <- read.table("m27_chr13_phased_genes.txt",header=T,sep="\t")
+#m116_pg_q5 <- read.table("m116_chr5_phased_genes.txt",header=T,sep="\t")
+m116_pg_q11 <- read.table("m116_chr11_phased_genes.txt",header=T,sep="\t")
+m116_pg_q13 <- read.table("m116_chr13_phased_genes.txt",header=T,sep="\t")
+
+#q5_com <- merge(m27_pg_q5,m116_pg_q5,by="Gene_ID") 
+q11_com <- merge(m27_pg_q11,m116_pg_q11,by="Gene_ID")
+q13_com <- merge(m27_pg_q13,m116_pg_q13,by="Gene_ID")
+
 ##get unique phased exons
 phased_exons <- apply(phased,1,function(x) within(exons,x[1]))
 phased_exons <- ldply(phased_exons ,data.frame)
