@@ -51,7 +51,7 @@ ev <- function(p,a) {
 	}
 }
 
-t1$evidence <- apply(t1[,c(9,11,13)],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
+t1$evidence <- apply(t1[,12:14],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
 phased <- t1[t1[,2]=="PHASED"&&t1$evidence>=2,] 
 
 #list of genes and exons containing phased snps
