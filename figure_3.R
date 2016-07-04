@@ -56,7 +56,7 @@ phased <- t1[t1[,2]=="PHASED"&&t1$evidence>=2,]
 #list of genes and exons containing phased snps
 
 ##produces list of data.frames of 0 or greater rows
-phased_genes <- apply(phased,1,function(x) within(genes,x[2]))
+phased_genes <- apply(phased,1,function(x) within(genes,x[1]))
 ##combine into a single data.frame (dumps 0 length rows)
 phased_genes <- ldply(phased_genes,data.frame)
 ##collapse to  unique plus number of snps per gene
@@ -64,7 +64,7 @@ unique_phased_genes <- ddply(phased_genes,.(Gene_ID),nrow)
 colnames(unique_phased_genes)[2] <- "snp_count"
 
 ##get unique phased exons
-phased_exons <- apply(phased,1,function(x) within(exons,x[2]))
+phased_exons <- apply(phased,1,function(x) within(exons,x[1]))
 phased_exons <- ldply(phased_exons ,data.frame)
 
 ##collapse to  unique plus number of snps per gene (i.e. combine counts from exons)
