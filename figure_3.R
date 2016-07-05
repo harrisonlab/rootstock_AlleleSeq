@@ -47,15 +47,19 @@ exons <- read.table("qtl_exons",header=T,sep="\t")
 #m116_chr11.txt
 #m116_chr13.txt
 
-alpha = 0.05
+
 x="m27_chr13"
 t1 <- read.table(paste(x,".txt",sep=""),header=T,sep="\t")
 
+# sum samples with allele-seq probability less than or equal to alpha 
+alpha = 0.05
 t1$evidence <- apply(t1[,12:14],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
+
+# Select phased snps with at least 2 samples with significant allelic expression 
+# (selecting on column 2 (phase) is not strictly necessary as only phased snps will have a probability less than 1)
 phased <- t1[t1[,2]=="PHASED"&t1$evidence>=2,] 
 
 #list of genes and exons containing phased snps
-
 ##produces list of data.frames of 0 or greater rows
 phased_genes <- apply(phased,1,function(x) within(genes,x[1]))
 ##combine into a single data.frame (dumps 0 length rows)
@@ -67,7 +71,7 @@ unique_phased_genes <- merge(unique_phased_genes,genes,all.x=T)
 xx <- paste(x,"_phased_genes.txt",sep="")
 write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
 
-### This is fairly pointless - but as I've already saved the phased genes...
+### This is fairly pointless - but as I've already saved the genes...
 m27_pg_q5 <- read.table("m27_chr5_phased_genes.txt",header=T,sep="\t")
 m27_pg_q11 <- read.table("m27_chr11_phased_genes.txt",header=T,sep="\t")
 m27_pg_q13 <- read.table("m27_chr13_phased_genes.txt",header=T,sep="\t")
@@ -93,14 +97,7 @@ colnames(unique_phased_exons)[2] <- "snp_count"
 
 gene_snps <- apply(genes,1,function(x) as.data.frame(cbind(x[3],sum(as.logical(snps_phased$V2>=as.integer(x[1])&snps_phased$V2<=as.integer(x[2]))))))
 gene_snps <- ldply(gene_snps,data.frame)
-
-
-
-
-#### Results QTL5 - m27
-QTL_genes 		= 1786
 dim(gene_snps[as.integer(levels(gene_snps$V2))[gene_snps$V2]>0,])
-genes with phased snps 	= 1266
-genes sig allele expressed	= 199 (130 within exons)
+
 
 
