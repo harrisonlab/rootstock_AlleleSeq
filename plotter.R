@@ -15,3 +15,4 @@ f11 <- c(1,rep(0,9),-1)
 fv <- filter(csvec, f11, sides = 1)
 
 #2
+lapply(fv,function(x) if(x>=8){return(1)}else if(x<=2){return(2)}else{return(0)})
