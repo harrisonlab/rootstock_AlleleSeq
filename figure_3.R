@@ -31,7 +31,7 @@ ev <- function(p,a) {
 	}
 }
 
-get_data <- function(sname,loc,alpha=0.05,location=within,dist=500) {
+get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 	options(stringsAsFactors = FALSE)
 	library(plyr)
 	mytable <- read.table(paste(sname,".txt",sep=""),header=T,sep="\t")
@@ -47,7 +47,7 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500) {
 	t1$evidence <- apply(t1[,12:14],1,function(x) return(ev(x[1],alpha)+ev(x[2],alpha)+ev(x[3],alpha)))
 	# Select phased snps with at least 2 samples with significant allelic expression 
 	# (selecting on column 2 (phase) is not strictly necessary as only phased snps will have a probability less than 1)
-	phased <- t1[t1[,2]=="PHASED"&t1$evidence>=2,] 
+	phased <- t1[t1[,2]=="PHASED"&t1$evidence>=evidence,] 
 	#list of genes and exons containing phased snps
 	##produces list of data.frames of 0 or greater rows
 	phased_genes <- apply(phased,1,function(x) location(genes,x[1],dist))
