@@ -91,20 +91,20 @@ q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
 q13_com <- merge(m27_pg_q13$sig_phased,m116_pg_q13$sig_phased,by="Gene_ID")
 
 ##get unique phased exons
-phased_exons <- apply(phased,1,function(x) within(exons,x[1]))
-phased_exons <- ldply(phased_exons ,data.frame)
+#phased_exons <- apply(phased,1,function(x) within(exons,x[1]))
+#phased_exons <- ldply(phased_exons ,data.frame)
 
 ##collapse to  unique plus number of snps per gene (i.e. combine counts from exons)
-unique_phased_exons <- ddply(phased_exons,.(Gene_ID),nrow)
-colnames(unique_phased_exons)[2] <- "snp_count"
+#unique_phased_exons <- ddply(phased_exons,.(Gene_ID),nrow)
+#colnames(unique_phased_exons)[2] <- "snp_count"
 
 # genes and exons without phased snps??
 
 ###gene_snps <- apply(snps_phased[1:100,],1,function(x) within(genes,x[2])) --- way too slow
 
-gene_snps <- apply(genes,1,function(x) as.data.frame(cbind(x[3],sum(as.logical(snps_phased$V2>=as.integer(x[1])&snps_phased$V2<=as.integer(x[2]))))))
-gene_snps <- ldply(gene_snps,data.frame)
-dim(gene_snps[as.integer(levels(gene_snps$V2))[gene_snps$V2]>0,])
+#gene_snps <- apply(genes,1,function(x) as.data.frame(cbind(x[3],sum(as.logical(snps_phased$V2>=as.integer(x[1])&snps_phased$V2<=as.integer(x[2]))))))
+#gene_snps <- ldply(gene_snps,data.frame)
+#dim(gene_snps[as.integer(levels(gene_snps$V2))[gene_snps$V2]>0,])
 
 
 
