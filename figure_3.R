@@ -2,29 +2,23 @@ options(stringsAsFactors = FALSE)
 library(plyr)
 
 between <- function(X,pos,dist) {
-	X[
-		(X$direction=="forward"&X[,1]>=(pos-dist)&X[,2]<=(pos+dist)) |
-		(X$direction=="reverse"&X[,2]>=(pos-dist)&X[,1]<=(pos+dist))
-	,]
+	X[(X[,1]>=(pos-dist)&X[,2]<=(pos+dist)),]
 }
 
 within <- function(X,pos,bin) {
-	X[
-		(X$direction=="forward"&X[,1]<=pos&X[,2]>=pos) |
-		(X$direction=="reverse"&X[,2]<=pos&X[,1]>=pos)
-	,]
+	X[(X[,1]<=pos&X[,2]>=pos),]
 }
 
 upstream <- function(X,pos,dist) {
 	X[
 		(X$direction=="forward"&pos<X[,1]&pos>=(X[,1]-dist)) |
-		(X$direction=="reverse"&pos>X[,2]&pos<=(X[,2]-dist))
+		(X$direction=="reverse"&pos>X[,2]&pos<=(X[,2]+dist))
 	,]
 }
 
 downstream <- function(X,pos,dist) {
 	X[
-		(X$direction=="forward"&pos>X[,2]&pos<=(X[,2]-dist)) |
+		(X$direction=="forward"&pos>X[,2]&pos<=(X[,2]+dist)) |
 		(X$direction=="reverse"&pos<X[,1]&pos>=(X[,1]-dist))
 	,]
 }
