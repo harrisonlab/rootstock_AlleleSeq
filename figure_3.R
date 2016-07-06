@@ -84,7 +84,7 @@ m27_pg_q11 <- get_data("m27_chr11","qtl11_genes",0.05)
 m27_pg_q13 <- get_data("m27_chr13","qtl13_genes",0.05)
 m116_pg_q5 <- get_data("m116_chr5","qtl5_genes",0.05)
 m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
-m116_pg_q13 <- get_data("m116_chr13""qtl13_genes",,0.05)
+m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
 
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
