@@ -159,106 +159,11 @@ NOTE: The beagle pedigree file does not conform with the pedigree file Linkage-f
 #java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
 ```
-##Chromosome painting
-http://www.paintmychromosomes.com/
+### Phasing without beagle
+Beagle does not phase as well as we would like - or the data is poor..
+phasing.r can phase m27 and m116.
+VCF files can be produced from the output to be run through the rest of the pipeline
 
-Download and installed FineSTRUCTURE v2
-```shell
-tar -zxf fs-2.0.7.tar.gz
-cd fs-2.0.7
-./configure --prefix=$HOME/usr/local
-make
-make install
-```
-Beagle v4 output (vcf) is not compatible with FineSTRUCTURE and no conversion scripts are provided. Fortunately vcf2snp (see below) produces output which is easily converted to FineSTRUCTURE format.
-FineSTRUCTURE format is as below
-
-1. number samples (x2 for diploids)
-2. number of snps
-3. P followed by snp positions (space separted)
-4. sample snp nucleotides maternal
-5. sample snp nucleotides paternal
-6. ++
-
-e.g.  
-4  
-5  
-P 1 5 10 20 30  
-ATCGG  
-ACCGT  
-ATCGC  
-CTCGG
-
-The below was run to convert all snps in vcf2snp output files to FineSTRUCTURE format 
-```shell
-echo 10 > full.phase
-wc -l m13.snv >>full.phase
-echo -n "P " >>full.phase
-cat mm106.snv|awk -F"\t" '{printf $2" "}'>>full.phase
-echo >>full.phase
-cat mm106.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
-echo >>full.phase
-cat mm106.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
-echo >>full.phase
-cat m13.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
-echo >>full.phase
-cat m13.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
-echo >>full.phase
-cat  m27.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
-echo >>full.phase
-cat  m27.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
-echo >>full.phase
-cat  m116.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
-echo >>full.phase
-cat  m116.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
-echo >>full.phase
-cat  m9.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
-echo >>full.phase
-cat m9.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
-echo >>full.phase
-```
-To return snps from a subsection of one chromosome ( in this instance chr 5 between 1.2M and 36.5M bases) the following was run (using calc.pl):
-
-```shell
-echo 10 > chr5.int.phase
-grep "^5" <m13.snv|perl calc.pl - 1200000 36500000|wc -l >>chr5.int.phase
-echo -n "P " >>chr5.int.phase
-grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf $2" "}'>>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m13.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m13.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m27.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m27.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m116.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m116.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m9.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-grep "^5" m9.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
-echo >>chr5.int.phase
-```
-To run FineSTRUCTURE
-
-fs ch5.int.cp -idfile data.ids -phasefiles chr5.int.phase -go
-
-(data.ids is a line seprated list of samples)
-
-##Transcriptome ASE
-http://www.cureffi.org/2013/08/26/allele-specific-rna-seq-pipeline-using-gsnap-and-gatk/
-http://alleleseq.gersteinlab.org/downloads.html
-
-The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator 
-looks like a good pipline to follow. 
-The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
 
 ### Make diploid genomes from VCF
 
@@ -454,7 +359,106 @@ $ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m116 12-RNA_L1.1.fq.trim 12-RNA
 ##QTL filtering
 
 
+##Chromosome painting
+http://www.paintmychromosomes.com/
 
+Download and installed FineSTRUCTURE v2
+```shell
+tar -zxf fs-2.0.7.tar.gz
+cd fs-2.0.7
+./configure --prefix=$HOME/usr/local
+make
+make install
+```
+Beagle v4 output (vcf) is not compatible with FineSTRUCTURE and no conversion scripts are provided. Fortunately vcf2snp (see below) produces output which is easily converted to FineSTRUCTURE format.
+FineSTRUCTURE format is as below
+
+1. number samples (x2 for diploids)
+2. number of snps
+3. P followed by snp positions (space separted)
+4. sample snp nucleotides maternal
+5. sample snp nucleotides paternal
+6. ++
+
+e.g.  
+4  
+5  
+P 1 5 10 20 30  
+ATCGG  
+ACCGT  
+ATCGC  
+CTCGG
+
+The below was run to convert all snps in vcf2snp output files to FineSTRUCTURE format 
+```shell
+echo 10 > full.phase
+wc -l m13.snv >>full.phase
+echo -n "P " >>full.phase
+cat mm106.snv|awk -F"\t" '{printf $2" "}'>>full.phase
+echo >>full.phase
+cat mm106.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
+echo >>full.phase
+cat mm106.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
+echo >>full.phase
+cat m13.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
+echo >>full.phase
+cat m13.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
+echo >>full.phase
+cat  m27.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
+echo >>full.phase
+cat  m27.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
+echo >>full.phase
+cat  m116.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
+echo >>full.phase
+cat  m116.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
+echo >>full.phase
+cat  m9.snv|awk -F"\t" '{printf substr ($6,1,1)}' >>full.phase
+echo >>full.phase
+cat m9.snv|awk -F"\t" '{printf substr ($6,2,1)}' >>full.phase
+echo >>full.phase
+```
+To return snps from a subsection of one chromosome ( in this instance chr 5 between 1.2M and 36.5M bases) the following was run (using calc.pl):
+
+```shell
+echo 10 > chr5.int.phase
+grep "^5" <m13.snv|perl calc.pl - 1200000 36500000|wc -l >>chr5.int.phase
+echo -n "P " >>chr5.int.phase
+grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf $2" "}'>>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" mm106.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m13.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m13.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m27.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m27.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m116.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m116.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m9.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,1,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+grep "^5" m9.snv|perl calc.pl - 1200000 36500000|awk -F"\t" '{printf substr ($6,2,1)}' >>chr5.int.phase
+echo >>chr5.int.phase
+```
+To run FineSTRUCTURE
+
+fs ch5.int.cp -idfile data.ids -phasefiles chr5.int.phase -go
+
+(data.ids is a line seprated list of samples)
+
+##Transcriptome ASE
+http://www.cureffi.org/2013/08/26/allele-specific-rna-seq-pipeline-using-gsnap-and-gatk/
+http://alleleseq.gersteinlab.org/downloads.html
+
+The Allelseq pipeline, which uses vcf2diploid, then vcf2snp along with CNVnator 
+looks like a good pipline to follow. 
+The url above (gerstein) has most of the details and the readme files in vcf2snp is pretty comprehensive
 ##OLD COMMANDS
 
 
