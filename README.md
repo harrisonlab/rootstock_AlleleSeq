@@ -159,10 +159,14 @@ NOTE: The beagle pedigree file does not conform with the pedigree file Linkage-f
 #java –Xmx 12000m –jar beagle.jar gt=./beagle/var.flt.vcf ped=./beagle/pedigree.ped out=beagle chrom=1 nthreads=4
 
 ```
+
+
+
 ### Phasing without beagle
 Beagle does not phase as well as we would like - or the data is poor..
 
 phasing.r can phase m27 and m116 given the list of snps as input:
+
 ```shell
 # create list of snps for phasing
 echo -e chr'\t'pos'\t'ref'\t'alt'\t'm9_p'\t'm9_m'\t'm27_p'\t'm27_m'\t'm116_p'\t'm116_m'\t'mm106_p'\t'mm106_m'\t'm13_p'\t'm13_m > ~/projects/apple_rootstock/allele/figure_1/snps
@@ -170,7 +174,7 @@ echo -e chr'\t'pos'\t'ref'\t'alt'\t'm9_p'\t'm9_m'\t'm27_p'\t'm27_m'\t'm116_p'\t'
 grep ^chr ~/projects/apple_rootstock/rootstock_genetics/beagle/corrected__snp_sort_root.vcf|awk -F"\t" '{print $1,$2,$4,$5,$11,$12,$13,$14}' OFS="\t" |perl -pe 's/:(.*?)\t/\t/g'|sed 's/:.*//g'|awk -F"/" '{$NF=$NF;print $0}' OFS="\t" >> ~/projects/apple_rootstock/allele/figure_1/snps
 ```
 
-A VCF file can be produced from the output to be run through the rest of the pipeline
+A VCF file could be produced from the output to be run through the rest of the pipeline - or, as below in analyis section, to correct the phase of allelic expressed snps.
 
 
 ### Make diploid genomes from VCF
@@ -362,6 +366,20 @@ $ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m116 10-RNA_L1_1.fq.trim 10-RNA
 $ROOTSTOCK/scripts/pipeline.sh $ROOTSTOCK/allele/m116 12-RNA_L1.1.fq.trim 12-RNA_L1.2.fq.trim m116_paternal_index m116_maternal_index m116.snv m116.snv.cnv m116.map m116_S12_10T_hits.txt
 ```
 
+### Analysis
+The phasing produced by Beagle doesn't seem to be correct.
+
+New phased snps were produced with phasing.r
+
+These could then be used to correct the phase of the snps in the allele-seq pipeline output (hits files).
+
+stuff(fig3).R will combine the allele-seq output from the 3 rna-seq samples (needs editing to add in a write.table section)
+
+correct_phase.r will then take the new phased snps and the output from stuff(fig3).R and correct the phase.
+
+figure_3.R will take the corrected hits files and output a list of genes which contain snps showing allelic expression
+
+Initial checks on the output of figure_3.R suggest the phasing is better (as in looking at several genes with multiple allelic expressed snps, these snps are all on the same chromosome (per gene)) 
 
 
 ##QTL filtering
