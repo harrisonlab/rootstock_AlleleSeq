@@ -34,7 +34,7 @@ ev <- function(p,a) {
 get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 	options(stringsAsFactors = FALSE)
 	library(plyr)
-	mytable <- read.table(paste(sname,".txt",sep=""),header=T,sep="\t")
+	mytable <- read.table(sname,header=T,sep="\t")
 	#genes could also be a list of exons
 	genes <- read.table(loc,header=T,sep="\t")
 	# Set probability of Weird results to 1 (they're too weird to use)
