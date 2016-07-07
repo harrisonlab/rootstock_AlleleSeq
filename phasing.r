@@ -37,9 +37,8 @@ write('##source="beagle.jar (r1399)"',file="m116_m27.vcf",append=T)
 write('##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated Allele Frequencies">',file="m116_m27.vcf",append=T)
 write('##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',file="m116_m27.vcf",append=T)
 write(paste("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","m116","m27",sep="\t"),file="m116_m27.vcf",append=T)
-write.table(vcf2,file="m116_m27.vcf",quote=F,col.names=F,row.names=F,append=T)
+write.table(vcf2,file="m116_m27.vcf",sep="\t",quote=F,col.names=F,row.names=F,append=T)
 ###end vcf
-
 
 # phase m116 utilising phased m27 data
 m116_trio <- snps[,c(1:4,11:12,9:10)]
