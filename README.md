@@ -167,7 +167,7 @@ phasing.r can phase m27 and m116 given the list of snps as input:
 # create list of snps for phasing
 echo -e chr'\t'pos'\t'ref'\t'alt'\t'm9_p'\t'm9_m'\t'm27_p'\t'm27_m'\t'm116_p'\t'm116_m'\t'mm106_p'\t'mm106_m'\t'm13_p'\t'm13_m > ~/projects/apple_rootstock/allele/figure_1/snps
 
-grep ^chr ~/projects/apple_rootstock/rootstock_genetics/beagle/corrected__snp_sort_root.vcf|head|awk -F"\t" '{print $1,$2,$4,$5,$11,$12,$13,$14}' OFS="\t" |perl -pe 's/:(.*?)\t/\t/g'|sed 's/:.*//g'|awk -F"/" '{$NF=$NF;print $0}' OFS="\t" >> ~/projects/apple_rootstock/allele/figure_1/snps
+grep ^chr ~/projects/apple_rootstock/rootstock_genetics/beagle/corrected__snp_sort_root.vcf|awk -F"\t" '{print $1,$2,$4,$5,$11,$12,$13,$14}' OFS="\t" |perl -pe 's/:(.*?)\t/\t/g'|sed 's/:.*//g'|awk -F"/" '{$NF=$NF;print $0}' OFS="\t" >> ~/projects/apple_rootstock/allele/figure_1/snps
 ```
 
 A VCF file can be produced from the output to be run through the rest of the pipeline
