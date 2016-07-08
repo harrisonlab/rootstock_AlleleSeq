@@ -59,7 +59,7 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 	unique_phased_genes <- merge(unique_phased_genes,genes,all.x=T)
 	xx <- paste(sname,"_phased_genes.txt",sep="")	
 	write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
-	mylist <- list(mytable,unique_phased_genes)
+	mylist <- list(t1,unique_phased_genes)
 	names(mylist) <- c("allele_seq","sig_phased")
 	return(mylist)
 }
@@ -79,6 +79,17 @@ m27_pg_q13 <- get_data("m27_chr13","qtl13_genes",0.05)
 m116_pg_q5 <- get_data("m116_chr5","qtl5_genes",0.05)
 m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
 m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
+
+test <- apply(m27_pg_q5$sig_phased,1,function(x) x)
+gitfunc <- function(x,Y) {
+	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y&evidence>=2,3:8]
+	colnames(Y)[3:6] <- C("A","C","G","T")
+
+	Y[3],Y[4] vs Y[5][6][7][8]
+}
+
+
+test <- m27_pg_q5$allele_seq[m27_pg_q5$allele_seq$pos>=m27_pg_q5$sig_phased$start[1]&m27_pg_q5$allele_seq$pos<=m27_pg_q5$sig_phased$end[1],]
 
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
