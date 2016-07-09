@@ -81,7 +81,7 @@ m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
 m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
 
 test <- apply(m27_pg_q5$sig_phased,1,function(x) x)
-gitfunc <- function(x,Y) {
+testfunc <- function(x,Y) {
 	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y&evidence>=2,3:8]
 	colnames(Y)[3:6] <- C("A","C","G","T")
 
