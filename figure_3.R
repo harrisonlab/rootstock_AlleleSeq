@@ -79,17 +79,19 @@ m27_pg_q13 <- get_data("m27_chr13","qtl13_genes",0.05)
 m116_pg_q5 <- get_data("m116_chr5","qtl5_genes",0.05)
 m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
 m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
-
-test <- apply(m27_pg_q5$sig_phased,1,function(x) x)
+#
 testfunc <- function(x,Y) {
-	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y&evidence>=2,3:8]
-	colnames(Y)[3:6] <- C("A","C","G","T")
-
-	Y[3],Y[4] vs Y[5][6][7][8]
+	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y$evidence>=2,3:8]
+	colnames(Y)[3:6] <- c("A","C","G","T")
+	test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
+	if (test>=0.5) {
+		return(test)
+	} else {
+		return(1-test)
+	}
 }
+m27_pg_q5$sig_phased$conf <- apply(m27_pg_q5$sig_phased,1,function(x) testfunc(x,m27_pg_q5$allele_seq))
 
-
-test <- m27_pg_q5$allele_seq[m27_pg_q5$allele_seq$pos>=m27_pg_q5$sig_phased$start[1]&m27_pg_q5$allele_seq$pos<=m27_pg_q5$sig_phased$end[1],]
 
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
