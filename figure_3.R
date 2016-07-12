@@ -39,7 +39,7 @@ testfunc <- function(x,Y) {
 	Y <- Y[Y$pos>=x[1]&Y$pos<=x[2]&Y$evidence>=2,3:8]
 	colnames(Y)[3:6] <- c("A","C","G","T")
 	if(!is.null(Y)) {
-		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
+		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")]))
 		return(round(test,2))
 	} else {
 		return(NA)
@@ -129,7 +129,7 @@ m27_pe_q13$sig_phased <- m27_pe_q13$sig_phased[m27_pe_q13$sig_phased$snp_count>0
 m116_pe_q5$sig_phased <- m116_pe_q5$sig_phased[m116_pe_q5$sig_phased$snp_count>0,]
 m116_pe_q11$sig_phased <- m116_pe_q11$sig_phased[m116_pe_q11$sig_phased$snp_count>0,]
 m116_pe_q13$sig_phased <- m116_pe_q13$sig_phased[m116_pe_q13$sig_phased$snp_count>0,]
-# get the proporion of allelic expressed snps (per exon) which are on the maternal chromosome
+# get the number of allelic expressed snps (per exon) which are on the maternal chromosome
 m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
 m27_pe_q11$sig_phased$mat_prop <- apply(m27_pe_q11$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q11$allele_seq))
 m27_pe_q13$sig_phased$mat_prop <- apply(m27_pe_q13$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q13$allele_seq))
@@ -137,18 +137,33 @@ m116_pe_q5$sig_phased$mat_prop <- apply(m116_pe_q5$sig_phased[,3:4],1,function(x
 m116_pe_q11$sig_phased$mat_prop <- apply(m116_pe_q11$sig_phased[,3:4],1,function(x) testfunc(x,m116_pe_q11$allele_seq))
 m116_pe_q13$sig_phased$mat_prop <- apply(m116_pe_q13$sig_phased[,3:4],1,function(x) testfunc(x,m116_pe_q13$allele_seq))
 
-# combine gene and exon results
-combine <- function(x,Y) {
-	Y <- Y[Y$Gene_ID==x[1],]
-	Y <- Y[order(Y$Start),]
-	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
+# collapse exons
+library(sqldf)
+exon_collapse <- function(X) {
+	# There must be an R way of doing this (aggregate?), but I can never remeber the code - anyway sql is very intuitive
+	X <- sqldf("select Gene_ID as Gene_ID, sum(snp_count) as snp_count, min(Start) as Start, max(End) as End, sum(mat_prop)/sum(snp_count) as mat_prop from X group by Gene_ID")
 }
-m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
-m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
-m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
-m116_pg_q5$sig_phased$exons <- apply(m116_pg_q5$sig_phased,1,function(x) combine(x,m116_pe_q5$sig_phased))
-m116_pg_q11$sig_phased$exons <- apply(m116_pg_q11$sig_phased,1,function(x) combine(x,m116_pe_q11$sig_phased))
-m116_pg_q13$sig_phased$exons <- apply(m116_pg_q13$sig_phased,1,function(x) combine(x,m116_pe_q13$sig_phased))
+m27_pe_q5$sig_phased <- exon_collapse(m27_pe_q5$sig_phase)
+m27_pe_q11$sig_phased <- exon_collapse(m27_pe_q11$sig_phase)
+m27_pe_q13$sig_phased <- exon_collapse(m27_pe_q13$sig_phase)
+m116_pe_q5$sig_phased <- exon_collapse(m116_pe_q5$sig_phase)
+m116_pe_q11$sig_phased <- exon_collapse(m116_pe_q11$sig_phase)
+m116_pe_q13$sig_phased <- exon_collapse(m116_pe_q13$sig_phase)
+
+
+### this may be useful if different exons can have different allelic expression) 
+###commbine gene and exon results
+#combine <- function(x,Y) {
+#	Y <- Y[Y$Gene_ID==x[1],]
+#	Y <- Y[order(Y$Start),]
+#	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
+#}
+#m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
+#m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
+#m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
+#m116_pg_q5$sig_phased$exons <- apply(m116_pg_q5$sig_phased,1,function(x) combine(x,m116_pe_q5$sig_phased))
+#m116_pg_q11$sig_phased$exons <- apply(m116_pg_q11$sig_phased,1,function(x) combine(x,m116_pe_q11$sig_phased))
+#m116_pg_q13$sig_phased$exons <- apply(m116_pg_q13$sig_phased,1,function(x) combine(x,m116_pe_q13$sig_phased))
 
 # write output
 write.table(m27_pg_q5$sig_phased,"m27_q5_allelic_genes",sep="\t",row.names=F,quote=F)
@@ -158,23 +173,57 @@ write.table(m116_pg_q5$sig_phased,"m116_q5_allelic_genes",sep="\t",row.names=F,q
 write.table(m116_pg_q11$sig_phased,"m116_q11_allelic_genes",sep="\t",row.names=F,quote=F)
 write.table(m116_pg_q13$sig_phased,"m116_q13_allelic_genes",sep="\t",row.names=F,quote=F)
 
+write.table(m27_pe_q5$sig_phased,"m27_pe_q5",sep="\t",quote=F,row.names=F)
+write.table(m27_pe_q11$sig_phased,"m27_pe_q11",sep="\t",quote=F,row.names=F)
+write.table(m27_pe_q13$sig_phased,"m27_pe_q13",sep="\t",quote=F,row.names=F)
+write.table(m116_pe_q5$sig_phased,"m116_pe_q5",sep="\t",quote=F,row.names=F)
+write.table(m116_pe_q11$sig_phased,"m116_pe_q11",sep="\t",quote=F,row.names=F)
+write.table(m116_pe_q13$sig_phased,"m116_pe_q13",sep="\t",quote=F,row.names=F)
+
 # Produce list of Mat and Pat / remove poorly supported snps (less than 80% mat or pat)
 # though we're not interested in the maternal (MM106) chromosome
 
-m27_q5_mat <- m27_pg_q5$sig_phased[m27_pg_q5$sig_phased$mat_prop >=0.8,]
-m27_q11_mat <- m27_pg_q11$sig_phased[m27_pg_q11$sig_phased$mat_prop >=0.8,]
-m27_q13_mat <- m27_pg_q13$sig_phased[m27_pg_q13$sig_phased$mat_prop >=0.8,]
-m116_q5_mat <- m116_pg_q5$sig_phased[m116_pg_q5$sig_phased$mat_prop >=0.8,]
-m116_q11_mat <- m116_pg_q11$sig_phased[m116_pg_q11$sig_phased$mat_prop >=0.8,]
-m116_q13_mat <- m116_pg_q13$sig_phased[m116_pg_q13$sig_phased$mat_prop >=0.8,]
+m27_q5_mat <- m27_pg_q5$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
+m27_q11_mat <- m27_pg_q11$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
+m27_q13_mat <- m27_pg_q13$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
+m116_q5_mat <- m116_pg_q5$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
+m116_q11_mat <- m116_pg_q11$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
+m116_q13_mat <- m116_pg_q13$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) >=0.8,]
 
-m27_q5_pat <- m27_pg_q5$sig_phased[m27_pg_q5$sig_phased$mat_prop <=0.2,]
-m27_q11_pat <- m27_pg_q11$sig_phased[m27_pg_q11$sig_phased$mat_prop <=0.2,]
-m27_q13_pat <- m27_pg_q13$sig_phased[m27_pg_q13$sig_phased$mat_prop <=0.2,]
-m116_q5_pat <- m116_pg_q5$sig_phased[m116_pg_q5$sig_phased$mat_prop <=0.2,]
-m116_q11_pat <- m116_pg_q11$sig_phased[m116_pg_q11$sig_phased$mat_prop <=0.2,]
-m116_q13_pat <- m116_pg_q13$sig_phased[m116_pg_q13$sig_phased$mat_prop <=0.2,]
+m27_q5_pat <- m27_pg_q5$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
+m27_q11_pat <- m27_pg_q11$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
+m27_q13_pat <- m27_pg_q13$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
+m116_q5_pat <- m116_pg_q5$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
+m116_q11_pat <- m116_pg_q11$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
+m116_q13_pat <- m116_pg_q13$sig_phased[(m27_pg_q5$sig_phased$mat_prop/m27_pg_q5$sig_phased$snp_count) <=0.2,]
 
+# or for exons 
+m27e_q5_mat <- m27_pe_q5$sig_phased[(m27_pe_q5$sig_phased$mat_prop) >=0.8,]
+m27e_q11_mat <- m27_pe_q11$sig_phased[(m27_pe_q11$sig_phased$mat_prop) >=0.8,]
+m27e_q13_mat <- m27_pe_q13$sig_phased[(m27_pe_q13$sig_phased$mat_prop) >=0.8,]
+m116e_q5_mat <- m116_pe_q5$sig_phased[(m116_pe_q5$sig_phased$mat_prop) >=0.8,]
+m116e_q11_mat <- m116_pe_q11$sig_phased[(m116_pe_q11$sig_phased$mat_prop) >=0.8,]
+m116e_q13_mat <- m116_pe_q13$sig_phased[(m116_pe_q13$sig_phased$mat_prop) >=0.8,]
+
+m27e_q5_pat <- m27_pe_q5$sig_phased[(m27_pe_q5$sig_phased$mat_prop) <=0.2,]
+m27e_q11_pat <- m27_pe_q11$sig_phased[(m27_pe_q11$sig_phased$mat_prop) <=0.2,]
+m27e_q13_pat <- m27_pe_q13$sig_phased[(m27_pe_q13$sig_phased$mat_prop) <=0.2,]
+m116e_q5_pat <- m116_pe_q5$sig_phased[(m116_pe_q5$sig_phased$mat_prop) <=0.2,]
+m116e_q11_pat <- m116_pe_q11$sig_phased[(m116_pe_q11$sig_phased$mat_prop) <=0.2,]
+m116e_q13_pat <- m116_pe_q13$sig_phased[(m116_pe_q13$sig_phased$mat_prop) <=0.2,]
+
+write.table(m27e_q5_mat,"m27e_q5_mat",sep="\t",quote=F,row.names=F)
+write.table(m27e_q11_mat,"m27e_q11_mat",sep="\t",quote=F,row.names=F)
+write.table(m27e_q13_mat,"m27e_q13_mat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q5_mat,"m116e_q5_mat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q11_mat,"m116e_q11_mat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q13_mat,"m116e_q13_mat",sep="\t",quote=F,row.names=F)
+write.table(m27e_q5_pat,"m27e_q5_pat",sep="\t",quote=F,row.names=F)
+write.table(m27e_q11_pat,"m27e_q11_pat",sep="\t",quote=F,row.names=F)
+write.table(m27e_q13_pat,"m27e_q13_pat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q5_pat,"m116e_q5_pat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q11_pat,"m116e_q11_pat",sep="\t",quote=F,row.names=F)
+write.table(m116e_q13_pat,"m116e_q13_pat",sep="\t",quote=F,row.names=F)
 
 
 
