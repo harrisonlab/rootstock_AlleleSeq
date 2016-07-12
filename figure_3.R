@@ -83,13 +83,13 @@ ev <- function(p,a) {
 }
 
 # ~/projects/apple_rootstock/allele/Figure3/hits
-#m27_chr5.txt
-#m27_chr11.txt
-#m27_chr13.txt
-#m116_chr5.txt - dw1 is not present in m116
-#m116_chr11.txt
-#m116_chr13.txt
-#files filtered and corrected with
+# m27_chr5.txt
+# m27_chr11.txt
+# m27_chr13.txt
+# m116_chr5.txt - dw1 is not present in m116
+# m116_chr11.txt
+# m116_chr13.txt
+# abovoe files filtered and corrected with correct_phase.r to give files with the same name minus the suffix
 
 # get data for genes
 m27_pg_q5 <-  get_data("m27_chr5","qtl5_genes",0.05)
