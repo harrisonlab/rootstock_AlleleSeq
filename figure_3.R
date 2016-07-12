@@ -36,7 +36,7 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 
 testfunc <- function(x,Y) {
 # determines the proportion of allelic expressed snps within a gene which are on the maternal chromosome
-	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y$evidence>=2,3:8]
+	Y <- Y[Y$pos>=x[1]&Y$pos<=x[2]&Y$evidence>=2,3:8]
 	colnames(Y)[3:6] <- c("A","C","G","T")
 	if(!is.null(Y)) {
 		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
@@ -48,7 +48,7 @@ testfunc <- function(x,Y) {
 
 exon_correction <- function(x,Y) {
 # get_data sums the no. of snps per gene - this is a quick fix to get the per exon values
-	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y$evidence>=2,3:8]
+	Y <- Y[Y$pos>=x[1]&Y$pos<=x[2]&Y$evidence>=2,3:8]
 	return(length(Y[,1]))
 }
 
@@ -101,12 +101,12 @@ m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
 m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
 
 # get the proporion of allelic expressed snps (per gene) which are on the maternal chromosome
-m27_pg_q5$sig_phased$mat_prop <- apply(m27_pg_q5$sig_phased,1,function(x) testfunc(x,m27_pg_q5$allele_seq))
-m27_pg_q11$sig_phased$mat_prop <- apply(m27_pg_q11$sig_phased,1,function(x) testfunc(x,m27_pg_q11$allele_seq))
-m27_pg_q13$sig_phased$mat_prop <- apply(m27_pg_q13$sig_phased,1,function(x) testfunc(x,m27_pg_q13$allele_seq))
-m116_pg_q5$sig_phased$mat_prop <- apply(m116_pg_q5$sig_phased,1,function(x) testfunc(x,m116_pg_q5$allele_seq))
-m116_pg_q11$sig_phased$mat_prop <- apply(m116_pg_q11$sig_phased,1,function(x) testfunc(x,m116_pg_q11$allele_seq))
-m116_pg_q13$sig_phased$mat_prop <- apply(m116_pg_q13$sig_phased,1,function(x) testfunc(x,m116_pg_q13$allele_seq))
+m27_pg_q5$sig_phased$mat_prop <- apply(m27_pg_q5$sig_phased[,3:4],1,function(x) testfunc(x,m27_pg_q5$allele_seq))
+m27_pg_q11$sig_phased$mat_prop <- apply(m27_pg_q11$sig_phased[,3:4],1,function(x) testfunc(x,m27_pg_q11$allele_seq))
+m27_pg_q13$sig_phased$mat_prop <- apply(m27_pg_q13$sig_phased[,3:4],1,function(x) testfunc(x,m27_pg_q13$allele_seq))
+m116_pg_q5$sig_phased$mat_prop <- apply(m116_pg_q5$sig_phased[,3:4],1,function(x) testfunc(x,m116_pg_q5$allele_seq))
+m116_pg_q11$sig_phased$mat_prop <- apply(m116_pg_q11$sig_phased[,3:4],1,function(x) testfunc(x,m116_pg_q11$allele_seq))
+m116_pg_q13$sig_phased$mat_prop <- apply(m116_pg_q13$sig_phased[,3:4],1,function(x) testfunc(x,m116_pg_q13$allele_seq))
 
 # get data for exons
 m27_pe_q5 <- get_data("m27_chr5","qtl5_exons",0.05)
@@ -116,12 +116,12 @@ m116_pe_q5 <- get_data("m116_chr5","qtl5_exons",0.05)
 m116_pe_q11 <- get_data("m116_chr11","qtl11_exons",0.05)
 m116_pe_q13 <- get_data("m116_chr13","qtl13_exons",0.05)
 # oops - get_data sums the number of snps across genes - exon_correction will correct this
-m27_pe_q5$sig_phased$snp_count <- apply(m27_pe_q5$sig_phased,1,function(x) exon_correction(x,m27_pe_q5$allele_seq))
-m27_pe_q11$sig_phased$snp_count <- apply(m27_pe_q11$sig_phased,1,function(x) exon_correction(x,m27_pe_q11$allele_seq))
-m27_pe_q13$sig_phased$snp_count <- apply(m27_pe_q13$sig_phased,1,function(x) exon_correction(x,m27_pe_q13$allele_seq))
-m116_pe_q5$sig_phased$snp_count <- apply(m116_pe_q5$sig_phased,1,function(x) exon_correction(x,m116_pe_q5$allele_seq))
-m116_pe_q11$sig_phased$snp_count <- apply(m116_pe_q11$sig_phased,1,function(x) exon_correction(x,m116_pe_q11$allele_seq))
-m116_pe_q13$sig_phased$snp_count <- apply(m116_pe_q13$sig_phased,1,function(x) exon_correction(x,m116_pe_q13$allele_seq))
+m27_pe_q5$sig_phased$snp_count <- apply(m27_pe_q5$sig_phased[,3:4],1,function(x) exon_correction(x,m27_pe_q5$allele_seq))
+m27_pe_q11$sig_phased$snp_count <- apply(m27_pe_q11$sig_phased[,3:4],1,function(x) exon_correction(x,m27_pe_q11$allele_seq))
+m27_pe_q13$sig_phased$snp_count <- apply(m27_pe_q13$sig_phased[,3:4],1,function(x) exon_correction(x,m27_pe_q13$allele_seq))
+m116_pe_q5$sig_phased$snp_count <- apply(m116_pe_q5$sig_phased[,3:4],1,function(x) exon_correction(x,m116_pe_q5$allele_seq))
+m116_pe_q11$sig_phased$snp_count <- apply(m116_pe_q11$sig_phased[,3:4],1,function(x) exon_correction(x,m116_pe_q11$allele_seq))
+m116_pe_q13$sig_phased$snp_count <- apply(m116_pe_q13$sig_phased[,3:4],1,function(x) exon_correction(x,m116_pe_q13$allele_seq))
 # Remove exons without allelic snps
 m27_pe_q5$sig_phased <- m27_pe_q5$sig_phased[m27_pe_q5$sig_phased$snp_count>0,]
 m27_pe_q11$sig_phased <- m27_pe_q11$sig_phased[m27_pe_q11$sig_phased$snp_count>0,]
@@ -130,12 +130,12 @@ m116_pe_q5$sig_phased <- m116_pe_q5$sig_phased[m116_pe_q5$sig_phased$snp_count>0
 m116_pe_q11$sig_phased <- m116_pe_q11$sig_phased[m116_pe_q11$sig_phased$snp_count>0,]
 m116_pe_q13$sig_phased <- m116_pe_q13$sig_phased[m116_pe_q13$sig_phased$snp_count>0,]
 # get the proporion of allelic expressed snps (per exon) which are on the maternal chromosome
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q11$sig_phased$mat_prop <- apply(m27_pe_q11$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q11$allele_seq))
-m27_pe_q13$sig_phased$mat_prop <- apply(m27_pe_q13$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q13$allele_seq))
-m116_pe_q5$sig_phased$mat_prop <- apply(m116_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q5$allele_seq))
-m116_pe_q11$sig_phased$mat_prop <- apply(m116_pe_q11$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q11$allele_seq))
-m116_pe_q13$sig_phased$mat_prop <- apply(m116_pe_q13$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q13$allele_seq))
+m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
+m27_pe_q11$sig_phased$mat_prop <- apply(m27_pe_q11$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q11$allele_seq))
+m27_pe_q13$sig_phased$mat_prop <- apply(m27_pe_q13$sig_phased[,3:4],1,function(x) testfunc(x,m27_pe_q13$allele_seq))
+m116_pe_q5$sig_phased$mat_prop <- apply(m116_pe_q5$sig_phased[,3:4],1,function(x) testfunc(x,m116_pe_q5$allele_seq))
+m116_pe_q11$sig_phased$mat_prop <- apply(m116_pe_q11$sig_phased[,3:4],1,function(x) testfunc(x,m116_pe_q11$allele_seq))
+m116_pe_q13$sig_phased$mat_prop <- apply(m116_pe_q13$sig_phased[,3:4],1,function(x) testfunc(x,m116_pe_q13$allele_seq))
 
 # combine gene and exon results
 combine <- function(x,Y) {
