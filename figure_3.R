@@ -20,7 +20,7 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 	phased <- t1[t1[,2]=="PHASED"&t1$evidence>=evidence,] 
 	#list of genes and exons containing phased snps
 	##produces list of data.frames of 0 or greater rows
-	phased_genes <- apply(phased,1,function(x) location(genes,x[1],dist))
+	phased_genes <- lapply(phased[,1],function(x) location(genes,x[1],dist))
 	##combine into a single data.frame (dumps 0 length rows)
 	phased_genes <- ldply(phased_genes,data.frame)
 	##collapse to  unique plus number of snps per gene
@@ -56,7 +56,8 @@ between <- function(X,pos,dist) {
 	X[(X[,1]>=(pos-dist)&X[,2]<=(pos+dist)),]
 }
 
-within <- function(X,pos,bin) {
+within <- function(X,pos,bin=0) {
+	pos <- as.numeric(pos)
 	X[(X[,1]<=pos&X[,2]>=pos),]
 }
 
@@ -142,7 +143,6 @@ combine <- function(x,Y) {
 	Y <- Y[order(Y$Start),]
 	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
 }
-
 m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
 m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
 m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
@@ -158,7 +158,27 @@ write.table(m116_pg_q5$sig_phased,"m116_q5_allelic_genes",sep="\t",row.names=F,q
 write.table(m116_pg_q11$sig_phased,"m116_q11_allelic_genes",sep="\t",row.names=F,quote=F)
 write.table(m116_pg_q13$sig_phased,"m116_q13_allelic_genes",sep="\t",row.names=F,quote=F)
 
-##  stuff
+# Produce list of Mat and Pat / remove poorly supported snps (less than 80% mat or pat)
+# though we're not interested in the maternal (MM106) chromosome
+
+m27_q5_mat <- m27_pg_q5$sig_phased[m27_pg_q5$sig_phased$mat_prop >=0.8,]
+m27_q11_mat <- m27_pg_q11$sig_phased[m27_pg_q11$sig_phased$mat_prop >=0.8,]
+m27_q13_mat <- m27_pg_q13$sig_phased[m27_pg_q13$sig_phased$mat_prop >=0.8,]
+m116_q5_mat <- m116_pg_q5$sig_phased[m116_pg_q5$sig_phased$mat_prop >=0.8,]
+m116_q11_mat <- m116_pg_q11$sig_phased[m116_pg_q11$sig_phased$mat_prop >=0.8,]
+m116_q13_mat <- m116_pg_q13$sig_phased[m116_pg_q13$sig_phased$mat_prop >=0.8,]
+
+m27_q5_pat <- m27_pg_q5$sig_phased[m27_pg_q5$sig_phased$mat_prop <=0.2,]
+m27_q11_pat <- m27_pg_q11$sig_phased[m27_pg_q11$sig_phased$mat_prop <=0.2,]
+m27_q13_pat <- m27_pg_q13$sig_phased[m27_pg_q13$sig_phased$mat_prop <=0.2,]
+m116_q5_pat <- m116_pg_q5$sig_phased[m116_pg_q5$sig_phased$mat_prop <=0.2,]
+m116_q11_pat <- m116_pg_q11$sig_phased[m116_pg_q11$sig_phased$mat_prop <=0.2,]
+m116_q13_pat <- m116_pg_q13$sig_phased[m116_pg_q13$sig_phased$mat_prop <=0.2,]
+
+
+
+
+
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
 q13_com <- merge(m27_pg_q13$sig_phased,m116_pg_q13$sig_phased,by="Gene_ID")
