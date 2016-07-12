@@ -81,17 +81,23 @@ m116_pg_q11 <- get_data("m116_chr11","qtl11_genes",0.05)
 m116_pg_q13 <- get_data("m116_chr13","qtl13_genes",0.05)
 #
 testfunc <- function(x,Y) {
+# determines the proportion of allelic expressed snps within a gene which are on the maternal chromosome
 	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y$evidence>=2,3:8]
 	colnames(Y)[3:6] <- c("A","C","G","T")
-	test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
-	if (test>=0.5) {
+	if(!is.null(Y)) {
+		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
 		return(test)
 	} else {
-		return(1-test)
+		return(NA)
 	}
 }
-m27_pg_q5$sig_phased$conf <- apply(m27_pg_q5$sig_phased,1,function(x) testfunc(x,m27_pg_q5$allele_seq))
+m27_pg_q5$sig_phased$mat_prop <- apply(m27_pg_q5$sig_phased,1,function(x) testfunc(x,m27_pg_q5$allele_seq))
 
+exon_correction <- function(x,Y) {
+# get_data sums the no. of snps per gene - this is a quick fix to get the per exon values
+	Y <- Y[Y$pos>=x[3]&Y$pos<=x[4]&Y$evidence>=2,3:8]
+	return(length(Y[,1]))
+}
 
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
