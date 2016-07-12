@@ -375,11 +375,9 @@ These could then be used to correct the phase of the snps in the allele-seq pipe
 
 stuff(fig3).R will combine the allele-seq output from the 3 rna-seq samples (needs editing to add in a write.table section)
 
-correct_phase.r will then take the new phased snps and the output from stuff(fig3).R and correct the phase.
+correct_phase.r will then take the new phased snps (phasing.r) and the output from stuff(fig3).r and correct the phase.
 
-figure_3.R will take the corrected hits files and output a list of genes which contain snps showing allelic expression
-
-Initial checks on the output of figure_3.R suggest the phasing is better (as in looking at several genes with multiple allelic expressed snps, these snps are all on the same chromosome (per gene)) 
+figure_3.r will take the corrected hits files and output a list of genes which contain snps showing allelic expression
 
 
 ##QTL filtering
