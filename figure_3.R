@@ -28,7 +28,7 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 	colnames(unique_phased_genes)[2] <- "snp_count"
 	unique_phased_genes <- merge(unique_phased_genes,genes,all.x=T)
 	xx <- paste(sname,"_phased_genes.txt",sep="")	
-	write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
+	#write.table(unique_phased_genes,xx,sep="\t",quote=F,row.names=F)
 	mylist <- list(t1,unique_phased_genes)
 	names(mylist) <- c("allele_seq","sig_phased")
 	return(mylist)
@@ -40,7 +40,7 @@ testfunc <- function(x,Y) {
 	colnames(Y)[3:6] <- c("A","C","G","T")
 	if(!is.null(Y)) {
 		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")])/length(Y[,1]))
-		return(test)
+		return(round(test,2))
 	} else {
 		return(NA)
 	}
@@ -82,12 +82,14 @@ ev <- function(p,a) {
 	}
 }
 
+# ~/projects/apple_rootstock/allele/Figure3/hits
 #m27_chr5.txt
 #m27_chr11.txt
 #m27_chr13.txt
 #m116_chr5.txt - dw1 is not present in m116
 #m116_chr11.txt
 #m116_chr13.txt
+#files filtered and corrected with
 
 # get data for genes
 m27_pg_q5 <-  get_data("m27_chr5","qtl5_genes",0.05)
@@ -104,7 +106,6 @@ m27_pg_q13$sig_phased$mat_prop <- apply(m27_pg_q13$sig_phased,1,function(x) test
 m116_pg_q5$sig_phased$mat_prop <- apply(m116_pg_q5$sig_phased,1,function(x) testfunc(x,m116_pg_q5$allele_seq))
 m116_pg_q11$sig_phased$mat_prop <- apply(m116_pg_q11$sig_phased,1,function(x) testfunc(x,m116_pg_q11$allele_seq))
 m116_pg_q13$sig_phased$mat_prop <- apply(m116_pg_q13$sig_phased,1,function(x) testfunc(x,m116_pg_q13$allele_seq))
-
 
 # get data for exons
 m27_pe_q5 <- get_data("m27_chr5","qtl5_exons",0.05)
@@ -129,12 +130,33 @@ m116_pe_q11$sig_phased <- m116_pe_q11$sig_phased[m116_pe_q11$sig_phased$snp_coun
 m116_pe_q13$sig_phased <- m116_pe_q13$sig_phased[m116_pe_q13$sig_phased$snp_count>0,]
 # get the proporion of allelic expressed snps (per exon) which are on the maternal chromosome
 m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
-m27_pe_q5$sig_phased$mat_prop <- apply(m27_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q5$allele_seq))
+m27_pe_q11$sig_phased$mat_prop <- apply(m27_pe_q11$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q11$allele_seq))
+m27_pe_q13$sig_phased$mat_prop <- apply(m27_pe_q13$sig_phased[,1:4],1,function(x) testfunc(x,m27_pe_q13$allele_seq))
+m116_pe_q5$sig_phased$mat_prop <- apply(m116_pe_q5$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q5$allele_seq))
+m116_pe_q11$sig_phased$mat_prop <- apply(m116_pe_q11$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q11$allele_seq))
+m116_pe_q13$sig_phased$mat_prop <- apply(m116_pe_q13$sig_phased[,1:4],1,function(x) testfunc(x,m116_pe_q13$allele_seq))
 
+# combine gene and exon results
+combine <- function(x,Y) {
+	Y <- Y[Y$Gene_ID==x[1],]
+	Y <- Y[order(Y$Start),]
+	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
+}
+
+m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
+m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
+m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
+m116_pg_q5$sig_phased$exons <- apply(m116_pg_q5$sig_phased,1,function(x) combine(x,m116_pe_q5$sig_phased))
+m116_pg_q11$sig_phased$exons <- apply(m116_pg_q11$sig_phased,1,function(x) combine(x,m116_pe_q11$sig_phased))
+m116_pg_q13$sig_phased$exons <- apply(m116_pg_q13$sig_phased,1,function(x) combine(x,m116_pe_q13$sig_phased))
+
+# write output
+write.table(m27_pg_q5$sig_phased,"m27_q5_allelic_genes",sep="\t",row.names=F,quote=F)
+write.table(m27_pg_q11$sig_phased,"m27_q11_allelic_genes",sep="\t",row.names=F,quote=F)
+write.table(m27_pg_q13$sig_phased,"m27_q13_allelic_genes",sep="\t",row.names=F,quote=F)
+write.table(m116_pg_q5$sig_phased,"m116_q5_allelic_genes",sep="\t",row.names=F,quote=F)
+write.table(m116_pg_q11$sig_phased,"m116_q11_allelic_genes",sep="\t",row.names=F,quote=F)
+write.table(m116_pg_q13$sig_phased,"m116_q13_allelic_genes",sep="\t",row.names=F,quote=F)
 
 ##  stuff
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
