@@ -37,6 +37,10 @@ get_data <- function(sname,loc,alpha=0.05,location=within,dist=500,evidence=2) {
 testfunc <- function(x,Y) {
 # determines the proportion of allelic expressed snps within a gene which are on the maternal chromosome
 	Y <- Y[Y$pos>=x[1]&Y$pos<=x[2]&Y$evidence>=2,3:8]
+# filter out snps with less than 1/4 the mean expression for the gene 
+	avg <- mean(as.matrix(Y[,3:6]))*4
+	#Y <- Y[rowSums(Y[,3:6])>=(avg/5)&rowSums(Y[,3:6])<=(avg*5),]
+	Y <- Y[rowSums(Y[,3:6])>=(avg/4),]
 	colnames(Y)[3:6] <- c("A","C","G","T")
 	if(!is.null(Y)) {
 		test <- (sum(Y[,1]==colnames(Y[3:6])[max.col(Y[3:6],ties.method="random")]))
@@ -49,6 +53,10 @@ testfunc <- function(x,Y) {
 exon_correction <- function(x,Y) {
 # get_data sums the no. of snps per gene - this is a quick fix to get the per exon values
 	Y <- Y[Y$pos>=x[1]&Y$pos<=x[2]&Y$evidence>=2,3:8]
+# filter out snps with less than 1/4 the mean expression for the gene 
+	avg <- mean(as.matrix(Y[,3:6]))*4
+	#Y <- Y[rowSums(Y[,3:6])>=(avg/5)&rowSums(Y[,3:6])<=(avg*5),]
+	Y <- Y[rowSums(Y[,3:6])>=(avg/4),]
 	return(length(Y[,1]))
 }
 
@@ -151,20 +159,6 @@ m116_pe_q11$sig_phased <- exon_collapse(m116_pe_q11$sig_phase)
 m116_pe_q13$sig_phased <- exon_collapse(m116_pe_q13$sig_phase)
 
 
-### this may be useful if different exons can have different allelic expression) 
-###commbine gene and exon results
-#combine <- function(x,Y) {
-#	Y <- Y[Y$Gene_ID==x[1],]
-#	Y <- Y[order(Y$Start),]
-#	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
-#}
-#m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
-#m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
-#m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
-#m116_pg_q5$sig_phased$exons <- apply(m116_pg_q5$sig_phased,1,function(x) combine(x,m116_pe_q5$sig_phased))
-#m116_pg_q11$sig_phased$exons <- apply(m116_pg_q11$sig_phased,1,function(x) combine(x,m116_pe_q11$sig_phased))
-#m116_pg_q13$sig_phased$exons <- apply(m116_pg_q13$sig_phased,1,function(x) combine(x,m116_pe_q13$sig_phased))
-
 # write output
 write.table(m27_pg_q5$sig_phased,"m27_q5_allelic_genes",sep="\t",row.names=F,quote=F)
 write.table(m27_pg_q11$sig_phased,"m27_q11_allelic_genes",sep="\t",row.names=F,quote=F)
@@ -225,11 +219,22 @@ write.table(m116e_q5_pat,"m116e_q5_pat",sep="\t",quote=F,row.names=F)
 write.table(m116e_q11_pat,"m116e_q11_pat",sep="\t",quote=F,row.names=F)
 write.table(m116e_q13_pat,"m116e_q13_pat",sep="\t",quote=F,row.names=F)
 
-
-
-
 q5_uncom <-  m27_pg_q5$sig_phased[!m27_pg_q5$sig_phased[,1]%in%m116_pg_q5$sig_phased[,1],] 
 q11_com <- merge(m27_pg_q11$sig_phased,m116_pg_q11$sig_phased,by="Gene_ID")
 q13_com <- merge(m27_pg_q13$sig_phased,m116_pg_q13$sig_phased,by="Gene_ID")
 
 
+
+### this may be useful if different exons can have different allelic expression) 
+###commbine gene and exon results
+#combine <- function(x,Y) {
+#	Y <- Y[Y$Gene_ID==x[1],]
+#	Y <- Y[order(Y$Start),]
+#	return(paste(Y[,5],":",Y[,2],":",Y[,7],sep="",collapse=";"))
+#}
+#m27_pg_q5$sig_phased$exons <- apply(m27_pg_q5$sig_phased,1,function(x) combine(x,m27_pe_q5$sig_phased))
+#m27_pg_q11$sig_phased$exons <- apply(m27_pg_q11$sig_phased,1,function(x) combine(x,m27_pe_q11$sig_phased))
+#m27_pg_q13$sig_phased$exons <- apply(m27_pg_q13$sig_phased,1,function(x) combine(x,m27_pe_q13$sig_phased))
+#m116_pg_q5$sig_phased$exons <- apply(m116_pg_q5$sig_phased,1,function(x) combine(x,m116_pe_q5$sig_phased))
+#m116_pg_q11$sig_phased$exons <- apply(m116_pg_q11$sig_phased,1,function(x) combine(x,m116_pe_q11$sig_phased))
+#m116_pg_q13$sig_phased$exons <- apply(m116_pg_q13$sig_phased,1,function(x) combine(x,m116_pe_q13$sig_phased))
