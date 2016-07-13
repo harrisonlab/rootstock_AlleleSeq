@@ -4,7 +4,7 @@
 ### and switch back when above 8 again
 
 ### 3. plot each block of inherited snps using plot segments
-
+options(stringsAsFactors = FALSE)
 
 phased_chr <- read.table("m116_m13.m9",header=T,sep="\t")
 
