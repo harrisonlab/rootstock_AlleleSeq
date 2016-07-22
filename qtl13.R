@@ -1,3 +1,5 @@
+### plots Dw3 for fig3
+### X comes from plotter.R qtl13_usable was created manually 
 ### four plots 
 ### m9 x m13
 ### m27
