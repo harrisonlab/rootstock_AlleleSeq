@@ -113,13 +113,22 @@ samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa
 
 Pileup into a single vcf with v1 (http://biobits.org/samtools_primer.html)
 
-mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
-First step is to index all BAM files (included in bam_files txt file). Then run pileup2.sh
-regions have been defined in the regions file. Finally concatenate output files (the regions file is sorted alphabetically rather than by chromosome - temp fix is to create an ordered list of output file names)
+Samtools mpileup is single threaded. Multiple instances can be launched to pileup different chromosome regions. 
+First step is to index all BAM files (included in bam_files txt file). Then run pileup2.sh with a regions file.
+Regions for the v1 apple genome have been defined in the attached regions file. Finally concatenate output files (the regions file is sorted alphabetically rather than by chromosome - temp fix is to create an ordered list of output file names)
 ```shell
+# create indes for each BAM (BAM file liocations in read in from bam_files)
 cat bam_files|xargs -I file samtools index file 
-./pileup2.sh /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa bam_files /home/groups/harrisonlab/project_files/rootstock_genetics piledup.bcf regions
 
+# pile them up
+./pileup2.sh \
+  /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1/Malus_x_domestica.v1.0-primary.pseudo.fa \
+  bam_files \
+  /home/groups/harrisonlab/project_files/rootstock_genetics \
+  piledup.bcf \
+  regions
+
+# join the output files together
 bcftools concat -f files >all_piledup.bcf
 ```
 Filter output for variants 
