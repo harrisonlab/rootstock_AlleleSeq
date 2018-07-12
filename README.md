@@ -117,7 +117,7 @@ Samtools mpileup is single threaded. Multiple instances can be launched to pileu
 First step is to index all BAM files (included in bam_files txt file). Then run pileup2.sh with a regions file.
 Regions for the v1 apple genome have been defined in the attached regions file. Finally concatenate output files (the regions file is sorted alphabetically rather than by chromosome - temp fix is to create an ordered list of output file names)
 ```shell
-# create indes for each BAM (BAM file liocations in read in from bam_files)
+# create indes for each BAM (BAM file locations read in from bam_files file)
 cat bam_files|xargs -I file samtools index file 
 
 # pile them up
