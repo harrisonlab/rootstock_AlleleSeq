@@ -123,10 +123,10 @@ cat bam_files|xargs -I file samtools index file
 ```
 Step2: create a regions files, regions for the v1 apple genome have been defined in the attached regions file
 
-Step3: pileup the bams with samtools mpileup and a regions file 
+Step3: pileup the bams with samtools mpileup and a regions file   
 (samtools mpileup -o OUTPUT_FILE -u -r REGION -f GENOME roots1.bam roots2.bam roots3.bam)
 
-The pileup2.sh makes it easy (ish) to run each defined region in the regions file as a seperate process. Input to pileup2.sh is the apple genome, the list of bam files as created in Step1 (bam_files), the output directory, the output file (this is a prefix which will have a number added to the end for each region), and the regions file created in Step2.
+The pileup2.sh makes it easy (ish) to run each defined region in the regions file as a seperate process. Input to pileup2.sh is the apple genome, the list of bam files as created in Step1 (bam_files), the output directory, the output file (this is a prefix which will have a number added to the end for each region), and the regions file created in Step2.  
 (pileup2.sh GENOME BAM_FILE OUTPUT_DIR OUTPUT_FILE_PREFIX REGIONS_FILE)
 ```shell
 # pile them up
