@@ -55,7 +55,7 @@ for d in [mg]*;
 
  ```
   
-##Assembly to reference
+## Assembly to reference
 A hash was created for version 1 of the genome
 
 ```shell
@@ -110,7 +110,7 @@ cd /home/groups/harrisonlab/project_files/rootstock_genetics/ref/v1
 samtools faidx Malus_x_domestica.v1.0-primary.pseudo.fa 
 
 ```
-##Piling up
+## Piling up
 Pileup into a single vcf with v1 genome (http://biobits.org/samtools_primer.html)
 
 Samtools mpileup is single threaded, but multiple instances can be launched to pileup different chromosome regions then concatentated with bcftools.
@@ -143,7 +143,7 @@ Step4: concatenate output files (the regions file is sorted alphabetically rathe
 # join the output files together
 bcftools concat -f files >all_piledup.bcf
 ```
-###Filter output for variants 
+### Filter output for variants 
 
 ```shell
 bcftools call -Ov -v -m all_piledup.bcf > all_piledup.vcf
