@@ -13,4 +13,4 @@ while read REGION
 do
 	let count++
 	qsub $SCRIPT_DIR/submit_pileup2.sh $REF $BAMS $DEST $OUTNAME.$count $REGION
-done < $REGIONS
+done < $REGIONS 
